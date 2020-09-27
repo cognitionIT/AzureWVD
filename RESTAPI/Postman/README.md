@@ -1,0 +1,2 @@
+# AzureWVD - REST API - Postman
+This folder contains a complete Postman configuration for your global variables, environment variables and Azure REST collection to perform some preconfigured REST API calls for the WVD Service on Azure. Feel free to import the folder into Postman, configure the environment variables values and your Azure REST collection variables with your specific Azure Subscription information to get started with your first REST API calls to the WVD service on Azure.

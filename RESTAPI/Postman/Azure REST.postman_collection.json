@@ -1,0 +1,264 @@
+{
+	"info": {
+		"_postman_id": "cfef4276-9972-4646-837e-54cd3f9edc35",
+		"name": "Azure REST",
+		"description": "Azure REST collection for WVD REST API calls",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get AAD Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(pm.info.requestName, () => {",
+							"    pm.response.to.not.be.error;",
+							"    pm.response.to.not.have.jsonBody('error');",
+							"});",
+							"pm.globals.set(\"bearerToken\", pm.response.json().access_token);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{clientId}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{clientSecret}}",
+							"type": "text"
+						},
+						{
+							"key": "resource",
+							"value": "{{resource}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/{{tenantId}}/oauth2/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"{{tenantId}}",
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ResourceManagement: Resource Groups - List",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearerToken}}"
+					}
+				],
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/{{subscriptionId}}/resourcegroups?api-version=2019-10-01",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						"{{subscriptionId}}",
+						"resourcegroups"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "2019-10-01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DesktopVirtualization: Host Pools - List",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearerToken}}"
+					}
+				],
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/{{subscriptionId}}/providers/Microsoft.DesktopVirtualization/hostPools?api-version=2019-12-10-preview",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						"{{subscriptionId}}",
+						"providers",
+						"Microsoft.DesktopVirtualization",
+						"hostPools"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "2019-12-10-preview"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DesktopVirtualization: User Sessions - List",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearerToken}}"
+					}
+				],
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/{{subscriptionId}}/resourceGroups/{{ResourceGroupName}}/providers/Microsoft.DesktopVirtualization/hostPools/{{HostPoolName}}/sessionHosts/{{SessionHostName}}/userSessions?api-version=2019-12-10-preview",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						"{{subscriptionId}}",
+						"resourceGroups",
+						"{{ResourceGroupName}}",
+						"providers",
+						"Microsoft.DesktopVirtualization",
+						"hostPools",
+						"{{HostPoolName}}",
+						"sessionHosts",
+						"{{SessionHostName}}",
+						"userSessions"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "2019-12-10-preview"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DesktopVirtualization: Workspaces - List",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearerToken}}"
+					}
+				],
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/{{subscriptionId}}/providers/Microsoft.DesktopVirtualization/workspaces?api-version=2019-12-10-preview",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						"{{subscriptionId}}",
+						"providers",
+						"Microsoft.DesktopVirtualization",
+						"workspaces"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "2019-12-10-preview"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "702836e3-4d29-432c-97bb-0b9f277d8a08",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "3669fd16-fd54-4748-8932-9d03e6ffb36f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "e7225acf-f55a-48e3-a36c-5e379e025ed2",
+			"key": "ResourceGroupName",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "3cccf072-66a6-4669-94ea-ec1af572a423",
+			"key": "HostPoolName",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "aa1ab44b-ddac-4533-a51e-0e6498ed3a2e",
+			"key": "SessionHostName",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
