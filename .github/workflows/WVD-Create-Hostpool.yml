@@ -29,8 +29,8 @@ jobs:
       with:
         inlineScript: |
           # Read the environment variables in PowerShell
-          $HostPoolName = [System.Environment]::GetEnvironmentVariable('AZURE_HOSTPOOL_NAME')
-          $NumberOfInstances = [System.Environment]::GetEnvironmentVariable('AZURE_NUMBER_OF_INSTANCES')
+          [string]$HostPoolName = [System.Environment]::GetEnvironmentVariable('AZURE_HOSTPOOL_NAME')
+          [int]$NumberOfInstances = [System.Environment]::GetEnvironmentVariable('AZURE_NUMBER_OF_INSTANCES')
           
           # Retrieve the Subscription information for the Service Principal (that is logged on)
           $azSubscriptions = Get-AzSubscription
@@ -97,7 +97,7 @@ jobs:
             ## Create a Template Parameter Object (hashtable)
             $objTemplateParameter = @{
               "hostpoolName" = $HostPoolName;
-              "hostpoolToken" = $($hostpoolToken);
+              "hostpoolToken" = $hostpoolToken;
               "hostpoolResourceGroup" = $($hostPool.Id.Split("/")[4]);
               "hostpoolProperties" = @{};
               "hostpoolLocation" = $($hostPool.Location);
