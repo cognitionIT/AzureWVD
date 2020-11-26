@@ -27,5 +27,5 @@ jobs:
       uses: azure/powershell@v1
       with:
         inlineScript: |
-        Write-Output "Hello AIB world :-)"
-      azPSVersion: 'latest'
+          Write-Output "Hello AIB world :-)"
+        azPSVersion: 'latest'
