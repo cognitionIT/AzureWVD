@@ -31,10 +31,8 @@ jobs:
           # Read the environment variables in PowerShell
           $HostPoolName = [System.Environment]::GetEnvironmentVariable('AZURE_HOSTPOOL_NAME')
           $NumberOfInstances = [System.Environment]::GetEnvironmentVariable('AZURE_NUMBER_OF_INSTANCES')
-          
           # Retrieve the Subscription information for the Service Principal (that is logged on)
           $azSubscriptions = Get-AzSubscription
-
           # Retrieve the given Host Pool information
           try 
           {
@@ -60,21 +58,17 @@ jobs:
                   Exit
               }
               $sessionHost = $sessionHosts[0]
-              
               # Retrieve sensitive information from KeyVault
               $secureAdminPassword = (Get-AzKeyVaultSecret -VaultName kv-infrasecrets -Name domainadminpassword).SecretValue
               $secureDomainAdminUser = (Get-AzKeyVaultSecret -VaultName kv-infrasecrets -Name domainadminuser).SecretValue
               $secureDomainName = (Get-AzKeyVaultSecret -VaultName kv-infrasecrets -Name domainname).SecretValue
               $secureOuPath = (Get-AzKeyVaultSecret -VaultName kv-infrasecrets -Name domainoupath).SecretValue
-          
               # Convert KeyVault SecureString to Plaintext
               $domainAdminUser = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureDomainAdminUser)))
               $domainName = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureDomainName)))
               $ouPath = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureOuPath)))
-
               # Retrieve the VMTemplate information
               $vmTemplate = ($hostPool.VMTemplate | ConvertFrom-Json)
-
               # Retrieve the vNet and subnet information of the VM
               $sessionHostName = $($sessionHost.Name.Split("/")[1].Split(".")[0])
               $sessionHostRG = (Get-AzVM -Name $sessionHostName).ResourceGroupName
@@ -82,7 +76,6 @@ jobs:
               $vnetInfo = (Get-AzNetworkInterface -ResourceGroupName $sessionHostRG | where {$_.Name -like "$($sessionHostName)*"}).IpConfigurations[0].Subnet.id.Split("/")[8]
               $subnetInfo = (Get-AzNetworkInterface -ResourceGroupName $sessionHostRG | where {$_.Name -like "$($sessionHostName)*"}).IpConfigurations[0].Subnet.id.Split("/")[10]
               $vnetrgInfo = (Get-AzNetworkInterface -ResourceGroupName $sessionHostRG | where {$_.Name -like "$($sessionHostName)*"}).IpConfigurations[0].Subnet.id.Split("/")[4]
-
               # Retrieve Hostpool token
               $registrationInfo = Get-AzWvdRegistrationInfo -SubscriptionId $($azSubscriptions.Id) -ResourceGroupName $($hostpoolRG) -HostPoolName $($hostpoolName)
               if ($($registrationInfo.ExpirationTime) -le $((Get-Date).ToUniversalTime().ToString('MM/dd/yyyy HH:mm:ss')) -and $(!([string]::IsNullOrEmpty($registrationInfo.ExpirationTime))))
@@ -93,7 +86,6 @@ jobs:
               {
                   $hostpoolToken = $((New-AzWvdRegistrationInfo -ResourceGroupName $hostpoolRG -HostPoolName $HostPoolName -ExpirationTime $((Get-Date).ToUniversalTime().AddDays(1).ToString('yyyy-MM-ddTHH:mm:ss.fffffffZ'))).Token)
               }
-
               ## Create a Template Parameter Object (hashtable)
               $objTemplateParameter = @{
                   "hostpoolName" = $HostPoolName;
@@ -127,19 +119,14 @@ jobs:
               }
               ## Show objTemplateParameter
               $objTemplateParameter
-
               # Temp location for the ARM template that will be used by this script (discarded when runbook is finished)
               $jsonARMTemplateFile = [string]($env:TEMP + "\WVDAT-AddToHostpool.json")
-              
               # Storage location for custom ARM template
               $templateUrl="https://raw.githubusercontent.com/cognitionIT/AzureWVD/master/ARMTemplates/ARM-T-WVDAddSessionHostToHostpool.json"
-
               # Retrieve the template file and save it in a temp file location
               Invoke-WebRequest -Uri $templateUrl -OutFile $jsonARMTemplateFile -UseBasicParsing
-
               # ARM Template file
               $jsonARMTemplateFile = "..\ARMTemplates\ARM-T-WVDAddSessionHostToHostpool.json"
-
               ## Add SessionHosts to existing WVD Hostpool, based on ARM Template
               New-AzResourceGroupDeployment -ResourceGroupName $hostpoolRG -TemplateFile $jsonARMTemplateFile -TemplateParameterObject $objTemplateParameter -administratorAccountPassword $secureAdminPassword -Verbose
         azPSVersion: 'latest'
