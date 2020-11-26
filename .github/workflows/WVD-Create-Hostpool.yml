@@ -1,10 +1,9 @@
 name: WVDCreateHostpool
-on:
-  push:
+on: workflow_dispatch
+#on:
+#  push:
 #    branches:
 #    - wvd-deployments
-    paths:
-    - 'WVD/**'
 
 env:
   AZURE_HOSTPOOL_NAME: "hp-wvd"                  # set this to the WVD Hostpool name to add the instances
