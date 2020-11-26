@@ -1,8 +1,8 @@
 name: WVDCreateHostpool
 on:
-  push:
-    branches:
-      - wvd-deployments
+  #push:
+  #  branches:
+  #    - wvd-deployments
   issue_comment:
     types: [created, edited]
 
