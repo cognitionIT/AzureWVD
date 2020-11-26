@@ -1,6 +1,6 @@
 name: AIB Create Image
-#on: workflow_dispatch
-on: push
+on: workflow_dispatch
+#on: push
 
 env:
   AZURE_HOSTPOOL_NAME: "hp-wvd"                  # set this to the WVD Hostpool name to add the instances
@@ -8,20 +8,19 @@ env:
 
 jobs:
   build:
-    name: WVD Deployment
+    name: Azure Image Builder
     runs-on: windows-latest
-    #if: github.event.comment.body == 'OK for WVD Deployment'
     steps:
+    ## Checkout your GitHub Workspace
+    - name: Checkout
+      uses: actions/checkout@v1
+    
     # Authentication: log on to Azure with the AZURE_CREDENTIALS secret
     - name: Login via Az module
       uses: azure/login@v1
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
         enable-AzPSSession: true 
-    
-    ## Checkout your GitHub Workspace
-    - name: Checkout
-      uses: actions/checkout@v1
     
     # Run an inline PowerShell script    
     - name: Run Azure PowerShell script (inline)
