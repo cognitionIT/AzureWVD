@@ -1,5 +1,6 @@
 name: AIB Create Image
-on: workflow_dispatch
+#on: workflow_dispatch
+on: push
 
 env:
   AZURE_HOSTPOOL_NAME: "hp-wvd"                  # set this to the WVD Hostpool name to add the instances
