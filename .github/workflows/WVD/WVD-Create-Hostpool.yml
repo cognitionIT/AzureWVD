@@ -1,8 +1,8 @@
 name: WVDCreateHostpool
 on:
   push:
-    branches:
-    - wvd-deployments
+#    branches:
+#    - wvd-deployments
     paths:
     - 'WVD/**'
 

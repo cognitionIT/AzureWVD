@@ -3,8 +3,6 @@ on:
   push:
     branches:
     - wvd-deployments
-    paths:
-    - 'AIB/**'
 
 env:
   AZURE_HOSTPOOL_NAME: "hp-wvd"                  # set this to the WVD Hostpool name to add the instances
