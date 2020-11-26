@@ -1,4 +1,4 @@
-name: AIBCreateImage
+name: AIB Create Image
 on: workflow_dispatch
 
 env:

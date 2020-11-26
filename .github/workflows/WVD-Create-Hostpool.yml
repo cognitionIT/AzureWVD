@@ -1,4 +1,4 @@
-name: WVDCreateHostpool
+name: WVD Create Hostpool
 on: workflow_dispatch
 #on:
 #  push:
