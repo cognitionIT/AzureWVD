@@ -1,18 +1,12 @@
 name: WVDCreateHostpool
 on:
-  #push:
-  #  branches:
-  #    - wvd-deployments
-  workflow_dispatch:
-    inputs:
-      loglevel:
-        description: 'Log level'
-        required: true
-        default: 'warning'
+  push:
+    branches:
+      - wvd-deployments
 
 env:
   AZURE_HOSTPOOL_NAME: "hp-wvd"                  # set this to the WVD Hostpool name to add the instances
-  AZURE_NUMBER_OF_INSTANCES: 1                   # set this to the number of instances to add to the WVD Hostpool
+  AZURE_NUMBER_OF_INSTANCES: 0                   # set this to the number of instances to add to the WVD Hostpool
 
 jobs:
   build:
