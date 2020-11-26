@@ -88,20 +88,19 @@ jobs:
             "ouPath"="$($ouPath)";
           }
             
-            ## Show objTemplateParameter
-            $objTemplateParameter
-            
-            # Temp location for the ARM template that will be used by this script (discarded when runbook is finished)
-            $jsonARMTemplateFile = [string]($env:TEMP + "\WVDAT-NewHostpool.json")
-            
-            # Storage location for custom ARM template
-            $templateUrl="https://raw.githubusercontent.com/cognitionIT/AzureWVD/master/ARMTemplates/ARM-T-WVDCreateHostpool.json"
-            
-            # Retrieve the template file and save it in a temp file location
-            Invoke-WebRequest -Uri $templateUrl -OutFile $jsonARMTemplateFile -UseBasicParsing
-            
-            # ARM Template file
-            ## Add SessionHosts to existing WVD Hostpool, based on ARM Template
-            New-AzResourceGroupDeployment -ResourceGroupName $hostpoolRG -TemplateFile $jsonARMTemplateFile -TemplateParameterObject $objTemplateParameter -administratorAccountPassword $secureAdminPassword -Verbose
-          }
+          ## Show objTemplateParameter
+          $objTemplateParameter
+          
+          # Temp location for the ARM template that will be used by this script (discarded when runbook is finished)
+          $jsonARMTemplateFile = [string]($env:TEMP + "\WVDAT-NewHostpool.json")
+          
+          # Storage location for custom ARM template
+          $templateUrl="https://raw.githubusercontent.com/cognitionIT/AzureWVD/master/ARMTemplates/ARM-T-WVDCreateHostpool.json"
+          
+          # Retrieve the template file and save it in a temp file location
+          Invoke-WebRequest -Uri $templateUrl -OutFile $jsonARMTemplateFile -UseBasicParsing
+          
+          # ARM Template file
+          ## Add SessionHosts to existing WVD Hostpool, based on ARM Template
+          New-AzResourceGroupDeployment -ResourceGroupName $hostpoolRG -TemplateFile $jsonARMTemplateFile -TemplateParameterObject $objTemplateParameter -administratorAccountPassword $secureAdminPassword -Verbose
         azPSVersion: 'latest'
