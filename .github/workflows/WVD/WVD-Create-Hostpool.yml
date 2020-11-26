@@ -2,7 +2,9 @@ name: WVDCreateHostpool
 on:
   push:
     branches:
-      - wvd-deployments
+    - wvd-deployments
+    paths:
+    - 'WVD/**'
 
 env:
   AZURE_HOSTPOOL_NAME: "hp-wvd"                  # set this to the WVD Hostpool name to add the instances
@@ -12,6 +14,7 @@ jobs:
   build:
     name: WVD Deployment
     runs-on: windows-latest
+    #if: github.event.comment.body == 'OK for WVD Deployment'
     steps:
     # Authentication: log on to Azure with the AZURE_CREDENTIALS secret
     - name: Login via Az module
