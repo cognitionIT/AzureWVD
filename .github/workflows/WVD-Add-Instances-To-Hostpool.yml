@@ -1,4 +1,4 @@
-name: WVD Create Hostpool
+name: WVD Add Instances to Hostpool
 on: workflow_dispatch
 #on:
 #  push:
@@ -11,7 +11,7 @@ env:
 
 jobs:
   build:
-    name: WVD Deployment
+    name: ARM Deployment
     runs-on: windows-latest
     #if: github.event.comment.body == 'OK for WVD Deployment'
     steps:
