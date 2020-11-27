@@ -58,7 +58,7 @@ jobs:
             "location" = "eastus";
             "validationEnvironment" = $false;
             "addToWorkspace" = $true;
-            "workSpaceName" = "ws-$($postFix)";
+            "workSpaceName" = "ws-wvd";
             "workspaceLocation" = "eastus";
             "workspaceResourceGroup" = "rg-wvd-infra";
             "allApplicationGroupReferences" = "/subscriptions/$($azSubscriptions.Id)/resourcegroups/rg-wvd-infra/providers/Microsoft.DesktopVirtualization/applicationgroups/hp-$($postFix)-DAG";
