@@ -14,7 +14,7 @@ jobs:
     steps:
     ## Checkout your GitHub Workspace
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
     
     # Authentication: log on to Azure with the AZURE_CREDENTIALS secret
     - name: Login via Az module
