@@ -33,7 +33,7 @@ jobs:
         managed-identity: ${{secrets.AZURE_AIB_IDENTITY}}
         source-os-type: 'windows'
         source-image-type: 'platformImage'
-        source-image: 'MicrosoftWindowsDesktop:Windows-10:19h2-evd:latest'
+        source-image: 'MicrosoftWindowsDesktop:Windows-10-App-Teams:19h2-evd:latest'
         customizer-source: '${{GITHUB.WORKSPACE}}\AIBCustomizations'
         customizer-script: |
           & 'C:\AIBCustomizations\Customize-WVDImage.ps1'

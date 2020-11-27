@@ -69,7 +69,7 @@ If (Invoke-NETFrameworkCheck)
         # Retrieve the Subscription information for the Service Principal (that is logged on)
         $azSubscriptions = Get-AzSubscription
 
-        $postFix = "wvd"
+        $postFix = "wvd-sig"
 
         ## Create a Template Parameter Object (hashtable)
         $objTemplateParameter = @{
@@ -79,6 +79,7 @@ If (Invoke-NETFrameworkCheck)
             "workSpaceName" = "ws-$($postFix)";
             "workspaceLocation" = "eastus";
             "workspaceResourceGroup" = "rg-wvd-infra";
+            "allApplicationGroupReferences" = "/subscriptions/$($azSubscriptions.Id)/resourcegroups/rg-wvd-infra/providers/Microsoft.DesktopVirtualization/applicationgroups/hp-$($postFix)-DAG";
             "addToWorkspace" = $true;
             "createAvailabilitySet" = $true;
             "vmResourceGroup" = "rg-wvd-resources";
@@ -86,10 +87,12 @@ If (Invoke-NETFrameworkCheck)
             "vmSize" = "Standard_D2s_v3";
             "vmNumberOfInstances" = 1;
             "vmNamePrefix" = "sh-$($postFix)";
-            "vmImageType" = "Gallery";
-            "vmGalleryImageOffer" = "office-365";
-            "vmGalleryImagePublisher" = "MicrosoftWindowsDesktop";
-            "vmGalleryImageSKU" = "19h2-evd-o365pp";
+            "vmImageType" = "CustomImage";
+            "vmCustomImageSourceId" = "/subscriptions/$($azSubscriptions.Id)/resourceGroups/rg-wvd-images/providers/Microsoft.Compute/galleries/sigWVDImages/images/Win10-MU-ImgDef";
+            #"vmImageType" = "Gallery";
+            #"vmGalleryImageOffer" = "office-365";
+            #"vmGalleryImagePublisher" = "MicrosoftWindowsDesktop";
+            #"vmGalleryImageSKU" = "19h2-evd-o365pp";
             "vmDiskType" = "StandardSSD_LRS";
             "vmUseManagedDisks" = $true;
             "existingVnetName" = "vnet-wvd-resources";
@@ -100,7 +103,7 @@ If (Invoke-NETFrameworkCheck)
             "hostpoolType" = "Pooled";
             "maxSessionLimit" = 25;
             "loadBalancerType" = "BreadthFirst";
-            "vmTemplate" = "{`"domain`"`:`"$($domainName)`",`"galleryImageOffer`"`:`"office-365`",`"galleryImagePublisher`"`:`"MicrosoftWindowsDesktop`",`"galleryImageSKU`"`:`"19h2-evd-o365pp`",`"imageType`"`:`"Gallery`",`"imageUri`"`:null,`"customImageId`"`:null,`"namePrefix`":`"sh-$($postFix)`",`"osDiskType`"`:`"StandardSSD_LRS`",`"useManagedDisks`"`:true,`"vmSize`"`:{`"id`"`:`"Standard_D2s_v3`",`"cores`"`:2,`"ram`"`:8},`"galleryItemId`"`:`"MicrosoftWindowsDesktop.office-36519h2-evd-o365pp`"}";
+            "vmTemplate" = "{`"domain`"`:`"$($domainName)`",`"galleryImageOffer`"`:null,`"galleryImagePublisher`"`:null,`"galleryImageSKU`"`:null,`"imageType`"`:`"CustomImage`",`"imageUri`"`:null,`"customImageId`"`:`"/subscriptions/$($azSubscriptions.Id)/resourceGroups/rg-wvd-images/providers/Microsoft.Compute/galleries/sigWVDImages/images/Win10-MU-ImgDef`",`"namePrefix`":`"sh-$($postFix)`",`"osDiskType`"`:`"StandardSSD_LRS`",`"useManagedDisks`"`:true,`"vmSize`"`:{`"id`"`:`"Standard_D2s_v3`",`"cores`"`:2,`"ram`"`:8},`"galleryItemId`"`:null}";
             "tokenExpirationTime" = $(Get-Date ((Get-Date).AddDays(25)) -Format "yyyy-MM-ddTHH:mm:ss.fffZ");
             "apiVersion" = "2019-12-10-preview";
             "validationEnvironment" = $false;
