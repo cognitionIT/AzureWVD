@@ -24,7 +24,8 @@ Start-Sleep -Seconds 10
 
 # Install Acrobat Reader DC
 Invoke-WebRequest -Uri 'ftp://ftp.adobe.com/pub/adobe/reader/win/AcrobatDC/2001320064/AcroRdrDC2001320064_en_US.exe' -OutFile 'c:\Install\AcroRdrDC2001320064_en_US.exe'
-Start-Process -FilePath "C:\Install\AcroRdrDC2001320064_en_US.exe" -ArgumentList "/sAll /rs /rps /msi /norestart /quiet EULA_ACCEPT=YES" #-Wait
+Invoke-Expression -Command 'C:\Install\AcroRdrDC2001320064_en_US.exe /sAll /rs /rps /msi /norestart /quiet EULA_ACCEPT=YES'
+#Start-Process -FilePath "C:\Install\AcroRdrDC2001320064_en_US.exe" -ArgumentList "/sAll /rs /rps /msi /norestart /quiet EULA_ACCEPT=YES" #-Wait
 
 # Wait for Adobe Installer to finish
 Start-Sleep -Seconds 180
@@ -32,8 +33,8 @@ Start-Sleep -Seconds 180
 # SIG # Begin signature block
 # MIINHAYJKoZIhvcNAQcCoIINDTCCDQkCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUWl5THybg0ezohEFLGjvN/LXE
-# ETKgggpeMIIFJjCCBA6gAwIBAgIQCyXBE0rAWScxh3bGfykLTjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUqut1Qh4itQvOkfBxRH+5IhpU
+# RIKgggpeMIIFJjCCBA6gAwIBAgIQCyXBE0rAWScxh3bGfykLTjANBgkqhkiG9w0B
 # AQsFADByMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYD
 # VQQLExB3d3cuZGlnaWNlcnQuY29tMTEwLwYDVQQDEyhEaWdpQ2VydCBTSEEyIEFz
 # c3VyZWQgSUQgQ29kZSBTaWduaW5nIENBMB4XDTIwMDgxMDAwMDAwMFoXDTIzMDgx
@@ -93,11 +94,11 @@ Start-Sleep -Seconds 180
 # Y29tMTEwLwYDVQQDEyhEaWdpQ2VydCBTSEEyIEFzc3VyZWQgSUQgQ29kZSBTaWdu
 # aW5nIENBAhALJcETSsBZJzGHdsZ/KQtOMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3
 # AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisG
-# AQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRB0X7aI8bz
-# Pg6yD920UcLZBLoZZzANBgkqhkiG9w0BAQEFAASCAQBg8BABEPjLM9jipF7/RUED
-# e31yb++FJg6LHL9SuEbifI8iTqS0vA8lnZinQPPplU9fURmlq6AMKSnD0KVWky0o
-# /8o13vQKR73jRYrYeXk/zFNOQCfL41RA08aZQTvP2J3FQtbqxmdnGCF38V58Zx9Y
-# EpR5nbluvHglRxZYkp9ZTDuVCLDqaQJM2I9QdMuFqr1QvARmhF4scEDbxw/OU6uS
-# dstfGLp+tsPc8u+sNI0vd9Z7tGL4+a3nf/LU19xHpW+KzN6kcoVRefE2+sXsatap
-# XIsJsA2QA+FSthwGzdBNzdldNK9pCPLBNuYHvkH4ImOjhWRPwNpOLlnF8P+BBqsI
+# AQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTVteUCFCDf
+# pDK8xqEHVDoE8dbqoTANBgkqhkiG9w0BAQEFAASCAQBMLGipb7u230EQRDUgLXJh
+# SH5hrv8EdrbSZWAfoPegOy++hNNNrXXPIX+1hO+/ACUKDas7ObeYSwzvx9iIFZZW
+# ZNJraLPZeS3xwezqWkhpFZJHQQnnBWoK8QdX3pzIjEwJDcj8q0dS+7mlp7ABPglN
+# wRBTov2jM+4DuyIh1ILETq9f+X9qj5HGE4Sr2/bGHAFapL+dGVAtOal8Giqz3GQF
+# hS2xwDwa3MSYrtAmwmmEIEwRtbHRKm1X9aBBKpfDCvNfYNtf7b2D/QW+sX5vyZR2
+# bAR9oJvTcGjtvcrInSY0KDFlnzu7r5vD1A+zrEuyjYNuZuswnyeqO6SLKfFooCq1
 # SIG # End signature block
