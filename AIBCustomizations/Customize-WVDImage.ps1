@@ -24,7 +24,7 @@ Start-Sleep -Seconds 10
 
 # Install Acrobat Reader DC
 Invoke-WebRequest -Uri 'ftp://ftp.adobe.com/pub/adobe/reader/win/AcrobatDC/2001320064/AcroRdrDC2001320064_en_US.exe' -OutFile 'c:\Install\AcroRdrDC2001320064_en_US.exe'
-Start-Process -FilePath 'c:\Install\AcroRdrDC2001320064_en_US.exe' -ArgumentList '/sAll /rs /rps /msi /norestart /quiet EULA_ACCEPT=YES' -Wait
+Start-Process -FilePath "c:\Install\AcroRdrDC2001320064_en_US.exe" -ArgumentList "/sAll /rs /rps /msi /norestart /quiet EULA_ACCEPT=YES" -Wait
 
 # Wait for Adobe Installer to finish
 Start-Sleep -Seconds 10
