@@ -15,16 +15,6 @@
 # Create Temporary Installation folder (for downloaded resources)
 New-Item -Path 'C:\Install' -ItemType Directory -Force | Out-Null
 
-# Create a shortcut on the Desktop with a version number
-$SourceFileLocation = "C:\Install"
-$ShortcutLocation = "$($env:PUBLIC)\Desktop\Installers v2.lnk"
-#New-Object : Creates an instance of a Microsoft .NET Framework or COM object.
-$WScriptShell = New-Object -ComObject WScript.Shell
-$Shortcut = $WScriptShell.CreateShortcut($ShortcutLocation)
-$Shortcut.TargetPath = $SourceFileLocation
-#Save the Shortcut to the TargetPath
-$Shortcut.Save()
-
 # Install Notepad++
 Invoke-WebRequest -Uri 'https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.9.1/npp.7.9.1.Installer.exe' -OutFile 'c:\Install\npp.7.9.1.Installer.exe'
 Invoke-Expression -Command 'C:\Install\npp.7.9.1.Installer.exe /S'
@@ -34,7 +24,7 @@ Start-Sleep -Seconds 10
 
 # Install Acrobat Reader DC
 Invoke-WebRequest -Uri 'ftp://ftp.adobe.com/pub/adobe/reader/win/AcrobatDC/2001320064/AcroRdrDC2001320064_en_US.exe' -OutFile 'c:\Install\AcroRdrDC2001320064_en_US.exe'
-Start-Process -FilePath "C:\Install\AcroRdrDC2001320064_en_US.exe" -ArgumentList "/sAll /rs /rps /msi /norestart /quiet EULA_ACCEPT=YES" -Wait
+Start-Process -FilePath "C:\Install\AcroRdrDC2001320064_en_US.exe" -ArgumentList "/sAll /rs /rps /msi /norestart /quiet EULA_ACCEPT=YES" #-Wait
 
 # Wait for Adobe Installer to finish
-Start-Sleep -Seconds 10
+Start-Sleep -Seconds 180
