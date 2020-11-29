@@ -1,4 +1,4 @@
-name: WVD Add Instances to Hostpool
+name: WVD - Add Instances to Hostpool
 on: workflow_dispatch
 #on:
 #  push:
@@ -6,14 +6,13 @@ on: workflow_dispatch
 #    - wvd-deployments
 
 env:
-  AZURE_HOSTPOOL_NAME: "hp-wvd"                  # set this to the WVD Hostpool name to add the instances
+  AZURE_HOSTPOOL_NAME: "hp-wvd-sig"              # set this to the WVD Hostpool name to add the instances
   AZURE_NUMBER_OF_INSTANCES: 1                   # set this to the number of instances to add to the WVD Hostpool
 
 jobs:
   build:
     name: ARM Deployment
     runs-on: windows-latest
-    #if: github.event.comment.body == 'OK for WVD Deployment'
     steps:
     # Authentication: log on to Azure with the AZURE_CREDENTIALS secret
     - name: Login via Az module
@@ -22,11 +21,7 @@ jobs:
         creds: ${{secrets.AZURE_CREDENTIALS}}
         enable-AzPSSession: true 
     
-    ## Checkout your GitHub Workspace
-    #- name: Checkout
-    #  uses: actions/checkout@v1
-    
-    # Run an inline PowerShell script    
+    # Azure PowerShell: Run inline script    
     - name: Run Azure PowerShell script (inline)
       uses: azure/powershell@v1
       with:
@@ -35,13 +30,10 @@ jobs:
           [string]$HostPoolName = [System.Environment]::GetEnvironmentVariable('AZURE_HOSTPOOL_NAME')
           [int]$NumberOfInstances = [System.Environment]::GetEnvironmentVariable('AZURE_NUMBER_OF_INSTANCES')
           
-          # Retrieve the Subscription information for the Service Principal (that is logged on)
-          $azSubscriptions = Get-AzSubscription
-          
           # Retrieve the given Host Pool information
           try 
           {
-              $hostPool = Get-AzWvdHostPool -SubscriptionId $($azSubscriptions.Id) | Where {$_.Name -eq $HostPoolName}
+              $hostPool = Get-AzWvdHostPool -SubscriptionId ${{secrets.AZURE_SUBSCRIPTIONID}} | Where {$_.Name -eq $HostPoolName}
           }
           catch 
           {
@@ -87,7 +79,7 @@ jobs:
             $vnetrgInfo = (Get-AzNetworkInterface -ResourceGroupName $sessionHostRG | where {$_.Name -like "$($sessionHostName)*"}).IpConfigurations[0].Subnet.id.Split("/")[4]
             
             # Retrieve Hostpool token
-            $registrationInfo = Get-AzWvdRegistrationInfo -SubscriptionId $($azSubscriptions.Id) -ResourceGroupName $($hostpoolRG) -HostPoolName $($hostpoolName)
+            $registrationInfo = Get-AzWvdRegistrationInfo -SubscriptionId ${{secrets.AZURE_SUBSCRIPTIONID}} -ResourceGroupName $($hostpoolRG) -HostPoolName $($hostpoolName)
             
             if ($($registrationInfo.ExpirationTime) -le $((Get-Date).ToUniversalTime().ToString('MM/dd/yyyy HH:mm:ss')) -and $(!([string]::IsNullOrEmpty($registrationInfo.ExpirationTime))))
             {
@@ -130,7 +122,7 @@ jobs:
             }
             
             ## Show objTemplateParameter
-            $objTemplateParameter
+            #$objTemplateParameter
             
             # Temp location for the ARM template that will be used by this script (discarded when runbook is finished)
             $jsonARMTemplateFile = [string]($env:TEMP + "\WVDAT-AddToHostpool.json")

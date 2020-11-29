@@ -1,19 +1,15 @@
-name: WVD New Hostpool based on Shared Image
+name: WVD - New Hostpool with SIG
 on: workflow_dispatch
-#on:
-#  push:
-#    branches:
-#    - wvd-deployments
 
 env:
   AZURE_HOSTPOOL_NAME: "hp-wvd-sig"              # WVD Hostpool name
   AZURE_NUMBER_OF_INSTANCES: 1                   # Number of instances to add to the WVD Hostpool
+  SIG_IMAGE_DEF_NAME: win10-evd-19h2
 
 jobs:
   build:
     name: ARM Deployment
     runs-on: windows-latest
-    #if: github.event.comment.body == 'OK for WVD Deployment'
     steps:
     # Authentication: log on to Azure with the AZURE_CREDENTIALS secret
     - name: Login via Az module
@@ -22,11 +18,7 @@ jobs:
         creds: ${{secrets.AZURE_CREDENTIALS}}
         enable-AzPSSession: true 
     
-    ## Checkout your GitHub Workspace
-    #- name: Checkout
-    #  uses: actions/checkout@v1
-    
-    # Run an inline PowerShell script    
+    # Azure PowerShell: Run inline script    
     - name: Run Azure PowerShell script (inline)
       uses: azure/powershell@v1
       with:
@@ -34,9 +26,6 @@ jobs:
           # Read the environment variables in PowerShell
           [string]$HostPoolName = [System.Environment]::GetEnvironmentVariable('AZURE_HOSTPOOL_NAME')
           [int]$NumberOfInstances = [System.Environment]::GetEnvironmentVariable('AZURE_NUMBER_OF_INSTANCES')
-          
-          # Retrieve the Subscription information for the Service Principal (that is logged on)
-          $azSubscriptions = Get-AzSubscription
           
           # Retrieve sensitive information from KeyVault
           $secureAdminPassword = (Get-AzKeyVaultSecret -VaultName kv-infrasecrets -Name domainadminpassword).SecretValue
@@ -69,7 +58,7 @@ jobs:
             "vmNumberOfInstances" = $NumberOfInstances;
             "vmNamePrefix" = "sh-$($postFix)";
             "vmImageType" = "CustomImage";
-            "vmCustomImageSourceId" = "/subscriptions/$($azSubscriptions.Id)/resourceGroups/rg-wvd-images/providers/Microsoft.Compute/galleries/sigWVDImages/images/Win10-MU-ImgDef";
+            "vmCustomImageSourceId" = "/subscriptions/${{secrets.AZURE_SUBSCRIPTIONID}}/resourceGroups/rg-wvd-images/providers/Microsoft.Compute/galleries/sigWVDImages/images/${{env.SIG_IMAGE_DEF_NAME}}";
             "vmDiskType" = "StandardSSD_LRS";
             "vmUseManagedDisks" = $true;
             "existingVnetName" = "vnet-wvd-resources";
@@ -80,7 +69,7 @@ jobs:
             "hostpoolType" = "Pooled";
             "maxSessionLimit" = 25;
             "loadBalancerType" = "BreadthFirst";
-            "vmTemplate" = "{`"domain`"`:`"$($domainName)`",`"galleryImageOffer`"`:null,`"galleryImagePublisher`"`:null,`"galleryImageSKU`"`:null,`"imageType`"`:`"CustomImage`",`"imageUri`"`:null,`"customImageId`"`:`"/subscriptions/$($azSubscriptions.Id)/resourceGroups/rg-wvd-images/providers/Microsoft.Compute/galleries/sigWVDImages/images/Win10-MU-ImgDef`",`"namePrefix`":`"sh-$($postFix)`",`"osDiskType`"`:`"StandardSSD_LRS`",`"useManagedDisks`"`:true,`"vmSize`"`:{`"id`"`:`"Standard_D2s_v3`",`"cores`"`:2,`"ram`"`:8},`"galleryItemId`"`:null}";
+            "vmTemplate" = "{`"domain`"`:`"$($domainName)`",`"galleryImageOffer`"`:null,`"galleryImagePublisher`"`:null,`"galleryImageSKU`"`:null,`"imageType`"`:`"CustomImage`",`"imageUri`"`:null,`"customImageId`"`:`"/subscriptions/${{secrets.AZURE_SUBSCRIPTIONID}}/resourceGroups/rg-wvd-images/providers/Microsoft.Compute/galleries/sigWVDImages/images/${{env.SIG_IMAGE_DEF_NAME}}`",`"namePrefix`":`"sh-$($postFix)`",`"osDiskType`"`:`"StandardSSD_LRS`",`"useManagedDisks`"`:true,`"vmSize`"`:{`"id`"`:`"Standard_D2s_v3`",`"cores`"`:2,`"ram`"`:8},`"galleryItemId`"`:null}";
             "tokenExpirationTime" = $(Get-Date ((Get-Date).AddDays(25)) -Format "yyyy-MM-ddTHH:mm:ss.fffZ");
             "apiVersion" = "2019-12-10-preview";
             "administratorAccountUsername" = "$($domainAdminUser)";
@@ -89,7 +78,7 @@ jobs:
           }
             
           ## Show objTemplateParameter
-          $objTemplateParameter
+          #$objTemplateParameter
           
           # Temp location for the ARM template that will be used by this script (discarded when runbook is finished)
           $jsonARMTemplateFile = [string]($env:TEMP + "\WVDAT-NewHostpool.json")
