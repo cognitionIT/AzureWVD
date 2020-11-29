@@ -1,9 +1,5 @@
-name: WVD - Add Instances to Hostpool
+name: WVD - Add instances to Hostpool
 on: workflow_dispatch
-#on:
-#  push:
-#    branches:
-#    - wvd-deployments
 
 env:
   AZURE_HOSTPOOL_NAME: "hp-wvd-sig"              # set this to the WVD Hostpool name to add the instances
@@ -11,7 +7,7 @@ env:
 
 jobs:
   build:
-    name: ARM Deployment
+    name: ARM - Add instances to WVD Hostpool
     runs-on: windows-latest
     steps:
     # Authentication: log on to Azure with the AZURE_CREDENTIALS secret

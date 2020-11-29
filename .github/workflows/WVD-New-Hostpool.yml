@@ -1,4 +1,4 @@
-name: WVD - New Hostpool with SIG
+name: WVD - New Hostpool with SIG image
 on: workflow_dispatch
 
 env:
@@ -8,7 +8,7 @@ env:
 
 jobs:
   build:
-    name: ARM Deployment
+    name: ARM - Create WVD Hostpool
     runs-on: windows-latest
     steps:
     # Authentication: log on to Azure with the AZURE_CREDENTIALS secret
