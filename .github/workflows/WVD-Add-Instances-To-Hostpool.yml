@@ -109,14 +109,25 @@ jobs:
               "usePublicIP" = $false;
               "createNetworkSecurityGroup" = $false;
               "apiVersion" = "2019-12-10-preview";
-              "vmGalleryImageOffer" = $($vmTemplate.galleryImageOffer);
-              "vmGalleryImagePublisher" = $($vmTemplate.galleryImagePublisher);
-              "vmGalleryImageSKU" = $($vmTemplate.galleryImageSKU);
               "administratorAccountUsername" = "$($domainAdminUser)";
               "domain"="$($domainName)";
               "ouPath"="$($ouPath)";
             }
             
+            # Add additional parameters, based on image type
+            If ($vmTemplate.imageType -eq "Gallery")
+            {
+                # Add the Gallery image information
+                $objTemplateParameter.Add("vmGalleryImageOffer",$($vmTemplate.galleryImageOffer))
+                $objTemplateParameter.Add("vmGalleryImagePublisher",$($vmTemplate.galleryImagePublisher))
+                $objTemplateParameter.Add("vmGalleryImageSKU",$($vmTemplate.galleryImageSKU))
+            }
+            If ($vmTemplate.imageType -eq "CustomImage")
+            {
+                # Add the Gallery image information
+                $objTemplateParameter.Add("vmCustomImageSourceId",$($vmTemplate.customImageId))
+            }
+
             ## Show objTemplateParameter
             #$objTemplateParameter
             
