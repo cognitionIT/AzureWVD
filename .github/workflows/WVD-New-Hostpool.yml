@@ -38,7 +38,7 @@ jobs:
           $domainName = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureDomainName)))
           $ouPath = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureOuPath)))
 
-          $postFix = "wvd-sig"
+          $postFix = "wvd-gha"
 
           ## Create a Template Parameter Object (hashtable)
           $objTemplateParameter = @{
