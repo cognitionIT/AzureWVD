@@ -2,7 +2,7 @@ name: WVD - Add instances to Hostpool
 on: workflow_dispatch
 
 env:
-  AZURE_HOSTPOOL_NAME: "hp-wvd-sig"              # set this to the WVD Hostpool name to add the instances
+  AZURE_HOSTPOOL_NAME: "hp-wvd-gha"              # set this to the WVD Hostpool name to add the instances
   AZURE_NUMBER_OF_INSTANCES: 1                   # set this to the number of instances to add to the WVD Hostpool
 
 jobs:
