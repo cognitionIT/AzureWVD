@@ -6,7 +6,7 @@ on: workflow_dispatch
 
 env:
   AIB_IMAGE_VERSION: 0.1.${{GITHUB.RUN_NUMBER}}     # Using the workflow run number for versioning
-  SIG_IMAGE_DEF_NAME: win10-evd-19h2                # image definition name in the Shared Image Gallery
+  SIG_IMAGE_DEF_NAME: win10-evd-20h2                # image definition name in the Shared Image Gallery
 
 jobs:
   build:
@@ -34,7 +34,7 @@ jobs:
         managed-identity: ${{secrets.AZURE_AIB_IDENTITY}}
         source-os-type: 'windows'
         source-image-type: 'platformImage'
-        source-image: 'MicrosoftWindowsDesktop:office-365:19h2-evd-o365pp:latest'
+        source-image: 'MicrosoftWindowsDesktop:office-365:20h2-evd-o365pp:latest'
         customizer-source: '${{GITHUB.WORKSPACE}}\AIBCustomizations'
         customizer-script: |
           & 'C:\AIBCustomizations\Customize-WVDImage.ps1'
