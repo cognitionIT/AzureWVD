@@ -3,7 +3,7 @@ on: workflow_dispatch
 
 env:
   AZURE_HOSTPOOL_NAME: "hp-wvd-gha"              # WVD Hostpool name
-  AZURE_NUMBER_OF_INSTANCES: 2                   # Number of instances to add to the WVD Hostpool
+  AZURE_NUMBER_OF_INSTANCES: 1                   # Number of instances to add to the WVD Hostpool
   SIG_IMAGE_DEF_NAME: win10-evd-20h2
 
 jobs:
