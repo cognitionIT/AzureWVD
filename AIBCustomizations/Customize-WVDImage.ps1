@@ -30,11 +30,18 @@ Invoke-Expression -Command 'C:\Install\AcroRdrDC2001320064_en_US.exe /sAll /rs /
 # Wait for Adobe Installer to finish
 Start-Sleep -Seconds 180
 
+# Install Fiddler
+Invoke-WebRequest -Uri 'https://downloads.getfiddler.com/win/Fiddler%20Everywhere%201.5.1.exe' -OutFile 'c:\Install\FiddlerSetup.exe'
+Invoke-Expression -Command 'C:\Install\FiddlerSetup.exe /S'
+
+# Wait for Fiddler installer to finish
+Start-Sleep -Seconds 10
+
 # SIG # Begin signature block
 # MIINHAYJKoZIhvcNAQcCoIINDTCCDQkCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUqut1Qh4itQvOkfBxRH+5IhpU
-# RIKgggpeMIIFJjCCBA6gAwIBAgIQCyXBE0rAWScxh3bGfykLTjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU6SnfUC4OLEdqZ3y43QOQysak
+# CzGgggpeMIIFJjCCBA6gAwIBAgIQCyXBE0rAWScxh3bGfykLTjANBgkqhkiG9w0B
 # AQsFADByMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYD
 # VQQLExB3d3cuZGlnaWNlcnQuY29tMTEwLwYDVQQDEyhEaWdpQ2VydCBTSEEyIEFz
 # c3VyZWQgSUQgQ29kZSBTaWduaW5nIENBMB4XDTIwMDgxMDAwMDAwMFoXDTIzMDgx
@@ -94,11 +101,11 @@ Start-Sleep -Seconds 180
 # Y29tMTEwLwYDVQQDEyhEaWdpQ2VydCBTSEEyIEFzc3VyZWQgSUQgQ29kZSBTaWdu
 # aW5nIENBAhALJcETSsBZJzGHdsZ/KQtOMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3
 # AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisG
-# AQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTVteUCFCDf
-# pDK8xqEHVDoE8dbqoTANBgkqhkiG9w0BAQEFAASCAQBMLGipb7u230EQRDUgLXJh
-# SH5hrv8EdrbSZWAfoPegOy++hNNNrXXPIX+1hO+/ACUKDas7ObeYSwzvx9iIFZZW
-# ZNJraLPZeS3xwezqWkhpFZJHQQnnBWoK8QdX3pzIjEwJDcj8q0dS+7mlp7ABPglN
-# wRBTov2jM+4DuyIh1ILETq9f+X9qj5HGE4Sr2/bGHAFapL+dGVAtOal8Giqz3GQF
-# hS2xwDwa3MSYrtAmwmmEIEwRtbHRKm1X9aBBKpfDCvNfYNtf7b2D/QW+sX5vyZR2
-# bAR9oJvTcGjtvcrInSY0KDFlnzu7r5vD1A+zrEuyjYNuZuswnyeqO6SLKfFooCq1
+# AQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBSSdgOA8mVd
+# 9u7OZaFtg/vLwrBIGTANBgkqhkiG9w0BAQEFAASCAQAvFmtl55biwY/v5PGRS1xr
+# eSclpr7JTE5jXu2ipPkCNvoU66WH5Qpd8iYcr6feEsqpCmNVRiNZ+3IoMLtkGBMM
+# 9+PEOhHE292JA4pXcDalwM9/4/dJn3ifn6j4/PiQX2sNYF9AwLiRm5LHKsfK0Uzi
+# +2rQ/FMOt7fQYEj7AiRi3hDqEgc8hg9QmqnYtIwXAdKBsKx+yDtAjPH2LLCPrDAx
+# VViYbbC27lYK3foub4ivnvR+b9oRoPSXXCtsy1RXAxen107yVmEgaExukAyGVg4V
+# Z0TCW2ABP7nCPaJt9FXDiKGfI6S6cMjVmhFLEKKRoAth4oZcJpMReWzE6LGdSFvo
 # SIG # End signature block
