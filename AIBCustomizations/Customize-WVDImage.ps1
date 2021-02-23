@@ -30,9 +30,9 @@ Invoke-Expression -Command 'C:\Install\AcroRdrDC2001320064_en_US.exe /sAll /rs /
 # Wait for Adobe Installer to finish
 Start-Sleep -Seconds 180
 
-# Install Fiddler
-Invoke-WebRequest -Uri 'https://downloads.getfiddler.com/win/Fiddler%20Everywhere%201.5.1.exe' -OutFile 'c:\Install\FiddlerSetup.exe'
-Invoke-Expression -Command 'C:\Install\FiddlerSetup.exe /S'
+# Install Visual Studio Code
+Invoke-WebRequest -Uri 'https://az764295.vo.msecnd.net/stable/622cb03f7e070a9670c94bae1a45d78d7181fbd4/VSCodeSetup-x64-1.53.2.exe' -OutFile 'c:\Install\VSCodeSetup-x64-1.53.2.exe'
+Invoke-Expression -Command 'C:\Install\VSCodeSetup-x64-1.53.2.exe /VERYSILENT /NORESTART /MERGETASKS=!runcode'
 
 # Wait for Fiddler installer to finish
 Start-Sleep -Seconds 10
@@ -40,8 +40,8 @@ Start-Sleep -Seconds 10
 # SIG # Begin signature block
 # MIINHAYJKoZIhvcNAQcCoIINDTCCDQkCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU6SnfUC4OLEdqZ3y43QOQysak
-# CzGgggpeMIIFJjCCBA6gAwIBAgIQCyXBE0rAWScxh3bGfykLTjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU3IguwkPRg5499upzyGg9e6FD
+# Dn2gggpeMIIFJjCCBA6gAwIBAgIQCyXBE0rAWScxh3bGfykLTjANBgkqhkiG9w0B
 # AQsFADByMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYD
 # VQQLExB3d3cuZGlnaWNlcnQuY29tMTEwLwYDVQQDEyhEaWdpQ2VydCBTSEEyIEFz
 # c3VyZWQgSUQgQ29kZSBTaWduaW5nIENBMB4XDTIwMDgxMDAwMDAwMFoXDTIzMDgx
@@ -101,11 +101,11 @@ Start-Sleep -Seconds 10
 # Y29tMTEwLwYDVQQDEyhEaWdpQ2VydCBTSEEyIEFzc3VyZWQgSUQgQ29kZSBTaWdu
 # aW5nIENBAhALJcETSsBZJzGHdsZ/KQtOMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3
 # AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisG
-# AQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBSSdgOA8mVd
-# 9u7OZaFtg/vLwrBIGTANBgkqhkiG9w0BAQEFAASCAQAvFmtl55biwY/v5PGRS1xr
-# eSclpr7JTE5jXu2ipPkCNvoU66WH5Qpd8iYcr6feEsqpCmNVRiNZ+3IoMLtkGBMM
-# 9+PEOhHE292JA4pXcDalwM9/4/dJn3ifn6j4/PiQX2sNYF9AwLiRm5LHKsfK0Uzi
-# +2rQ/FMOt7fQYEj7AiRi3hDqEgc8hg9QmqnYtIwXAdKBsKx+yDtAjPH2LLCPrDAx
-# VViYbbC27lYK3foub4ivnvR+b9oRoPSXXCtsy1RXAxen107yVmEgaExukAyGVg4V
-# Z0TCW2ABP7nCPaJt9FXDiKGfI6S6cMjVmhFLEKKRoAth4oZcJpMReWzE6LGdSFvo
+# AQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBT9nvcO/LtP
+# zAqAl9cDblU3Ax0ddzANBgkqhkiG9w0BAQEFAASCAQAjkVSN+psVn8C+OPQpWR4t
+# /2AyHR+vVz4nUryIssplmwPyMXI0JhKJAGvLtN3ckuGqYiFdNS5sUFgaMQpJW74/
+# y6mdrL9VzwxN7COEcq1o3WVlJ4mn/tieCWCIJl2v9ZFWX8JJ6qsmqZ9LObcKva7Y
+# Lb08nUE4bgPK+kEptAEfBzTIUfVJUuJaMJAxMTckihUhz0BhnlOK8wK58/W1adOG
+# FD30iBdrow/P1agNOTnfCq5gkOL5dL+UAFmd+BlISguwohyLS9Vi5ZIRF7wOK5l/
+# 5v3RXu1UHX81Kj7gP6Cj9qf5DT4k0cnNXTZ/ygkXH44UpendAV7retoVJjIRko7w
 # SIG # End signature block
