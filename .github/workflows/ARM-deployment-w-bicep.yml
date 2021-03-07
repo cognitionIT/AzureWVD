@@ -1,0 +1,36 @@
+name: ARM deployment with bicep
+on: workflow_dispatch
+
+env:
+  BICEP_FILE: "main.bicep"                                                # bicep filename to deploy
+  RESOURCE_GROUP_NAME: "rg-bicep"                                         # resource group name for deployment
+
+jobs:
+  build:
+    name: ARM Deployment with bicep file
+    runs-on: windows-latest
+    steps:
+    # Checkout: checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it. (see https://github.com/actions/checkout)
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    # Authentication: log on to Azure with the AZURE_CREDENTIALS secret
+    - name: Login via Az module
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+        enable-AzPSSession: true 
+    
+    # Azure PowerShell: Run inline script    
+    - name: Run Azure PowerShell script (inline)
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          # Read the environment variables in PowerShell
+          [string]$BicepFile = [System.Environment]::GetEnvironmentVariable('BICEP_FILE')
+          [int]$ResourceGroupName = [System.Environment]::GetEnvironmentVariable('RESOURCE_GROUP_NAME')
+          
+          Write-Host ("BICEP FILE: " + $($BicepFile))
+          Write-Host ("RESOURCE GROUP NAME: " + $($ResourceGroupName))
+          Write-Host ("Get GITHUB_WORKSPACE: " + ${{ $GITHUB_WORKSPACE }})
+        azPSVersion: 'latest'
