@@ -71,4 +71,4 @@ jobs:
           # ARM Template file
           ## Deploy resources based on bicep file for ARM Template
           New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupName -TemplateFile $($biceptemplateFile) -TemplateParameterObject $objTemplateParameter -Verbose
-        azPSVersion: '5.6.0'
+        azPSVersion: 'latest'
