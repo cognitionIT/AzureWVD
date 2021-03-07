@@ -29,7 +29,7 @@
           $bicepFile = [string]($env:TEMP + "\demo.bicep")
           
           # Storage location for bicep file template
-          $templateUrl="https://raw.githubusercontent.com/cognitionIT/AzureWVD/master/ARMTemplates/ARM-T-WVDCreateHostpool.json"
+          $templateUrl="https://raw.githubusercontent.com/cognitionIT/AzureWVD/master/Bicep/demo.bicep"
           
           # Retrieve the template file and save it in a temp file location
           Invoke-WebRequest -Uri $templateUrl -OutFile $bicepFile -UseBasicParsing
@@ -39,4 +39,4 @@
 
           # ARM Template file
           ## Add SessionHosts to existing WVD Hostpool, based on ARM Template
-          New-AzResourceGroupDeployment -ResourceGroupName "rg-wvd-infra" -TemplateFile $jsonARMTemplateFile -TemplateParameterObject $objTemplateParameter -administratorAccountPassword $secureAdminPassword #-
+          New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupName -TemplateFile $bicepFile -TemplateParameterObject $objTemplateParameter -Verbose
