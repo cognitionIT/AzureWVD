@@ -29,7 +29,7 @@ jobs:
         inlineScript: |
           # Read the environment variables in PowerShell
           [string]$BicepFile = [System.Environment]::GetEnvironmentVariable('BICEP_FILE')
-          [int]$ResourceGroupName = [System.Environment]::GetEnvironmentVariable('RESOURCE_GROUP_NAME')
+          [string]$ResourceGroupName = [System.Environment]::GetEnvironmentVariable('RESOURCE_GROUP_NAME')
           
           Write-Host ("BICEP FILE: " + $($BicepFile))
           Write-Host ("RESOURCE GROUP NAME: " + $($ResourceGroupName))
