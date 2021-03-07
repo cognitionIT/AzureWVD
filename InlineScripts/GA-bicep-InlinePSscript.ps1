@@ -26,17 +26,17 @@
           $objTemplateParameter
           
           # Temp location for the bicep file that will be used by this script (discarded when runbook is finished)
-          $bicepFile = [string]($env:TEMP + "\demo.bicep")
+          $biceptemplateFile = [string]($env:TEMP + "\demo.bicep")
           
           # Storage location for bicep file template
           $templateUrl="https://raw.githubusercontent.com/cognitionIT/AzureWVD/master/Bicep/demo.bicep"
           
           # Retrieve the template file and save it in a temp file location
-          Invoke-WebRequest -Uri $templateUrl -OutFile $bicepFile -UseBasicParsing
+          Invoke-WebRequest -Uri $templateUrl -OutFile $biceptemplateFile -UseBasicParsing
           
           # Create the resourceGroup
-          New-AzResourceGroup -Name $resourcegroupName -Location $($location)
+          New-AzResourceGroup -Name $($resourcegroupName) -Location $($location)
 
           # ARM Template file
           ## Add SessionHosts to existing WVD Hostpool, based on ARM Template
-          New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupName -TemplateFile $bicepFile -TemplateParameterObject $objTemplateParameter -Verbose
+          New-AzResourceGroupDeployment -ResourceGroupName "$($resourcegroupName)" -TemplateFile "$($biceptemplateFile)" -TemplateParameterObject $objTemplateParameter -Verbose
