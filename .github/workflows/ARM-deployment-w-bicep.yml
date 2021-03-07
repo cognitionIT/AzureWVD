@@ -31,7 +31,7 @@ jobs:
           [string]$BicepFile = [System.Environment]::GetEnvironmentVariable('BICEP_FILE')
           [string]$ResourceGroupName = [System.Environment]::GetEnvironmentVariable('RESOURCE_GROUP_NAME')
           
-          Write-Host ("BICEP FILE: " + $($BicepFile))
-          Write-Host ("RESOURCE GROUP NAME: " + $($ResourceGroupName))
-          Write-Host ("GITHUB_WORKSPACE: " + "${{GITHUB.WORKSPACE}}")
+          Write-Host ("BICEP FILE: " + $($BicepFile)) -ForegroundColor Yellow
+          Write-Host ("RESOURCE GROUP NAME: " + $($ResourceGroupName)) -ForegroundColor Yellow
+          Write-Host ("GITHUB_WORKSPACE: " + "${{GITHUB.WORKSPACE}}") -ForegroundColor Yellow
         azPSVersion: 'latest'
