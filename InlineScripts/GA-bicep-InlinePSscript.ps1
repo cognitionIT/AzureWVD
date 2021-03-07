@@ -8,7 +8,7 @@
           
           Write-Output ("* BICEP FILE: " + $($bicepFile))
           Write-Output ("* RESOURCE GROUP NAME: " + $($resourcegroupName))
-          Write-Out ("* GITHUB_WORKSPACE: " + $($githubWorkspace))
+          Write-Output ("* GITHUB_WORKSPACE: " + $($githubWorkspace))
 
           ## Create a Template Parameter Object (hashtable)
           $objTemplateParameter = @{
