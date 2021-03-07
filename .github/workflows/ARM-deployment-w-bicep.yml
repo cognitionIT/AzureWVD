@@ -10,7 +10,8 @@ jobs:
     name: ARM Deployment with bicep file
     runs-on: windows-latest
     steps:
-    # Checkout: checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it. (see https://github.com/actions/checkout)
+    # Checkout: checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it. 
+    #           see https://github.com/actions/checkout & https://github.com/marketplace/actions/checkout
     - name: Checkout
       uses: actions/checkout@v2
     
@@ -32,5 +33,5 @@ jobs:
           
           Write-Host ("BICEP FILE: " + $($BicepFile))
           Write-Host ("RESOURCE GROUP NAME: " + $($ResourceGroupName))
-          Write-Host ("Get GITHUB_WORKSPACE: " + ${{ $GITHUB_WORKSPACE }})
+          Write-Host ("Get GITHUB_WORKSPACE: " + $($GITHUB_WORKSPACE))
         azPSVersion: 'latest'
