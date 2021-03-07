@@ -5,8 +5,8 @@ on: workflow_dispatch
 #on: push
 
 env:
-  AIB_IMAGE_VERSION: 0.1.${{GITHUB.RUN_NUMBER}}     # Using the workflow run number for versioning
-  SIG_IMAGE_DEF_NAME: win10-evd-20h2                # image definition name in the Shared Image Gallery
+  AIB_IMAGE_VERSION: 0.1.${{GITHUB.RUN_NUMBER}}     # versioning
+  SIG_IMAGE_DEF_NAME: win10-evd-20h2                # image def name in SIG
 
 jobs:
   build:

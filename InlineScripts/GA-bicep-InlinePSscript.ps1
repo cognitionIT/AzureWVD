@@ -1,24 +1,26 @@
-﻿          # Update the Az Module to 5.6.0+
-          Update-Module -Name Az -RequiredVersion 5.6.0 -Force #-ErrorAction SilentlyContinue
+﻿          ## Update the Az Module to 5.6.0+ (does not work with GitHub Actions as it is not installed using Install-Module)
+          #Update-Module -Name Az -RequiredVersion 5.6.0 -Force #-ErrorAction SilentlyContinue
 
           # Read the GitHub Actions variables
           [string]$githubWorkspace = "${{GITHUB.WORKSPACE}}"
 
           # Read the environment variables in PowerShell
           [string]$location = [System.Environment]::GetEnvironmentVariable('LOCATION')
-          [string]$bicepFile = [System.Environment]::GetEnvironmentVariable('BICEP_FILE')
+          [string]$bicepFilePath = [System.Environment]::GetEnvironmentVariable('BICEP_FILE_PATH')
           [string]$resourcegroupName = [System.Environment]::GetEnvironmentVariable('RESOURCE_GROUP_NAME')
           
-          Write-Output ("* BICEP FILE: " + $($bicepFile))
+          Write-Output ("* BICEP FILE PATH: " + $($bicepFilePath))
           Write-Output ("* RESOURCE GROUP NAME: " + $($resourcegroupName))
           Write-Output ("* GITHUB_WORKSPACE: " + $($githubWorkspace))
+
+          $namePostFix = $resourcegroupName.Replace("rg-","")
 
           ## Create a Template Parameter Object (hashtable)
           $objTemplateParameter = @{
             "location" = "$($location)";
-            "workSpaceName" = "ws-wvd-bicepdemo";
-            "hostpoolName" = "hp-wvd-bicepdemo";
-            "appgroupName" = "ag-wvd-bicepdemo";
+            "workSpaceName" = "ws-wvd-$($namePostFix)";
+            "hostpoolName" = "hp-wvd-$($namePostFix)";
+            "appgroupName" = "ag-wvd-$($namePostFix)";
             "preferredAppGroupType" = "Desktop";
             "hostPoolType" = "pooled";
             "loadbalancertype" = "DepthFirst";
@@ -28,22 +30,13 @@
           # Show objTemplateParameter
           $objTemplateParameter
           
-          # Temp location for the bicep file that will be used by this script (discarded when runbook is finished)
-          $biceptemplateFile = [string]($env:TEMP + "\demo.bicep")
-          Write-Output ("* BICEP TEMP FILE: " + $($biceptemplateFile))
-          
-          # Storage location for bicep file template
-          $templateUrl="https://raw.githubusercontent.com/cognitionIT/AzureWVD/master/Bicep/demo.bicep"
-          
-          # Retrieve the template file and save it in a temp file location
-          Invoke-WebRequest -Uri $templateUrl -OutFile $biceptemplateFile -UseBasicParsing
-          
-          $biceptemplateFile = [string]("$($githubWorkspace)" + "\bicep\demo.bicep")
-          Write-Output ("* BICEP TEMP FILE: " + $($biceptemplateFile))
+          # Location of the bicep file in the local checked-out repo
+          $biceptemplateFile = [string]("$($githubWorkspace)" + "\" + "$($bicepFilePath)")
+          Write-Output ("* BICEP TEMPLATE FILE: " + $($biceptemplateFile))
 
           # Create the resourceGroup
-          New-AzResourceGroup -Name $($resourcegroupName) -Location $($location)
+          New-AzResourceGroup -Name $resourcegroupName -Location $location
 
           # ARM Template file
-          ## Add SessionHosts to existing WVD Hostpool, based on ARM Template
-          New-AzResourceGroupDeployment -ResourceGroupName "$($resourcegroupName)" -TemplateFile "$($biceptemplateFile)" -TemplateParameterObject $objTemplateParameter -Verbose
+          ## Deploy resources based on bicep file for ARM Template
+          New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupName -TemplateFile $($biceptemplateFile) -TemplateParameterObject $objTemplateParameter -Verbose
