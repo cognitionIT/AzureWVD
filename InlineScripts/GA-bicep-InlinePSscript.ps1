@@ -1,4 +1,7 @@
-﻿          # Read the GitHub Actions variables
+﻿          # Update the Az Module to 5.6.0+
+          Update-Module -Name Az -RequiredVersion 5.6.0 -ErrorAction SilentlyContinue
+
+          # Read the GitHub Actions variables
           [string]$githubWorkspace = "${{GITHUB.WORKSPACE}}"
 
           # Read the environment variables in PowerShell
