@@ -1,5 +1,5 @@
 ﻿          # Update the Az Module to 5.6.0+
-          Update-Module -Name Az -RequiredVersion 5.6.0 -Force -ErrorAction SilentlyContinue
+          Update-Module -Name Az -RequiredVersion 5.6.0 -Force #-ErrorAction SilentlyContinue
 
           # Read the GitHub Actions variables
           [string]$githubWorkspace = "${{GITHUB.WORKSPACE}}"
@@ -30,6 +30,7 @@
           
           # Temp location for the bicep file that will be used by this script (discarded when runbook is finished)
           $biceptemplateFile = [string]($env:TEMP + "\demo.bicep")
+          Write-Output ("* BICEP TEMP FILE: " + $($biceptemplateFile))
           
           # Storage location for bicep file template
           $templateUrl="https://raw.githubusercontent.com/cognitionIT/AzureWVD/master/Bicep/demo.bicep"
@@ -37,6 +38,9 @@
           # Retrieve the template file and save it in a temp file location
           Invoke-WebRequest -Uri $templateUrl -OutFile $biceptemplateFile -UseBasicParsing
           
+          $biceptemplateFile = [string]("$($githubWorkspace)" + "\bicep\demo.bicep")
+          Write-Output ("* BICEP TEMP FILE: " + $($biceptemplateFile))
+
           # Create the resourceGroup
           New-AzResourceGroup -Name $($resourcegroupName) -Location $($location)
 
