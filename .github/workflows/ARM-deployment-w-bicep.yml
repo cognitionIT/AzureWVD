@@ -3,8 +3,8 @@ on: workflow_dispatch
 
 env:
   LOCATION: "westeurope"                                                  # location for ARM deployment
-  BICEP_FILE_PATH: "bicep\demo.bicep"                                          # bicep filename to deploy
-  RESOURCE_GROUP_NAME: "rg-bicepdemo2"                                     # resource group name for deployment
+  BICEP_FILE: "demo.bicep"                                                # bicep filename to deploy
+  RESOURCE_GROUP_NAME: "rg-bicepdemo2"                                    # resource group name for deployment
 
 jobs:
   build:
@@ -37,10 +37,10 @@ jobs:
 
           # Read the environment variables in PowerShell
           [string]$location = [System.Environment]::GetEnvironmentVariable('LOCATION')
-          [string]$bicepFilePath = [System.Environment]::GetEnvironmentVariable('BICEP_FILE_PATH')
+          [string]$bicepFile = [System.Environment]::GetEnvironmentVariable('BICEP_FILE')
           [string]$resourcegroupName = [System.Environment]::GetEnvironmentVariable('RESOURCE_GROUP_NAME')
           
-          Write-Output ("* BICEP FILE PATH: " + $($bicepFilePath))
+          Write-Output ("* BICEP FILE: " + $($bicepFile))
           Write-Output ("* RESOURCE GROUP NAME: " + $($resourcegroupName))
           Write-Output ("* GITHUB_WORKSPACE: " + $($githubWorkspace))
 
@@ -62,7 +62,7 @@ jobs:
           $objTemplateParameter
           
           # Location of the bicep file in the local checked-out repo
-          $biceptemplateFile = [string]("$($githubWorkspace)" + "\" + "$($bicepFilePath)")
+          $biceptemplateFile = [string]("$($githubWorkspace)" + "\bicep\" + "$($bicepFile)")
           Write-Output ("* BICEP TEMPLATE FILE: " + $($biceptemplateFile))
 
           # Create the resourceGroup
