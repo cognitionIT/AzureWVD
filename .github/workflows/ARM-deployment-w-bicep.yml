@@ -73,9 +73,9 @@ jobs:
           Write-Output ("* BICEP TEMP FILE: " + $($biceptemplateFile))
 
           # Create the resourceGroup
-          New-AzResourceGroup -Name $($resourcegroupName) -Location $($location)
+          New-AzResourceGroup -Name $resourcegroupName -Location $location
 
           # ARM Template file
           ## Add SessionHosts to existing WVD Hostpool, based on ARM Template
-          New-AzResourceGroupDeployment -ResourceGroupName "$($resourcegroupName)" -TemplateFile "$($biceptemplateFile)" -TemplateParameterObject $objTemplateParameter -Verbose
+          New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupName -TemplateFile $biceptemplateFile -TemplateParameterObject $objTemplateParameter -Verbose
         azPSVersion: 'latest'
