@@ -39,6 +39,8 @@ jobs:
           $currentPath = (Get-Item -path "HKCU:\Environment" ).GetValue('Path', '', 'DoNotExpandEnvironmentNames')
           if (-not $currentPath.Contains("%USERPROFILE%\.bicep")) { setx PATH ($currentPath + ";%USERPROFILE%\.bicep") }
           if (-not $env:path.Contains($installPath)) { $env:path += ";$installPath" }
+          # Copy the bicep file to system32
+          Copy-Item "$installPath\bicep.exe" -Destination "C:\Windows\System32"
           # Verify you can now access the 'bicep' command.
           bicep --help
           # Done!
