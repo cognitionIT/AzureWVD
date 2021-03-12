@@ -25,7 +25,7 @@ jobs:
         enable-AzPSSession: true 
     # Azure PowerShell: Run inline script
     #                   source: https://github.com/marketplace/actions/azure-powershell-action   
-    - name: Run Azure PowerShell script (inline)
+    - name: Install Bicep with Azure PowerShell script (inline)
       uses: azure/powershell@v1
       with:
         inlineScript: |
@@ -47,7 +47,7 @@ jobs:
         azPSVersion: 'latest'
     # Azure PowerShell: Run inline script
     #                   source: https://github.com/marketplace/actions/azure-powershell-action   
-    - name: Run Azure PowerShell script (inline)
+    - name: Deploy Bicep resources with Azure PowerShell script (inline)
       uses: azure/powershell@v1
       with:
         inlineScript: |
