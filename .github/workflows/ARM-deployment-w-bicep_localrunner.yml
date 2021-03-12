@@ -66,8 +66,8 @@ jobs:
           $biceptemplateFile = [string]("$($githubWorkspace)" + "\bicep\" + "$($bicepFile)")
           Write-Output ("* BICEP TEMPLATE FILE: " + $($biceptemplateFile))
 
-          # Create the resourceGroup
-          New-AzResourceGroup -Name $resourcegroupName -Location $location
+          ## Create the resourceGroup
+          #New-AzResourceGroup -Name $resourcegroupName -Location $location
 
           # ARM Template file
           ## Deploy resources based on bicep file for ARM Template
