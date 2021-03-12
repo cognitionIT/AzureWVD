@@ -1,0 +1,75 @@
+name: ARM deployment with bicep (self-hosted runner)
+on: workflow_dispatch
+
+env:
+  LOCATION: "westeurope"                                                  # location for ARM deployment
+  BICEP_FILE: "demo.bicep"                                                # bicep filename to deploy
+  RESOURCE_GROUP_NAME: "rg-bicepdemo2"                                    # resource group name for deployment
+
+jobs:
+  build:
+    name: ARM Deployment with bicep file
+    #runs-on: windows-latest
+    runs-on: self-hosted
+    steps:
+    # Checkout: checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it. 
+    #           source: https://github.com/actions/checkout & https://github.com/marketplace/actions/checkout
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    # Authentication: log on to Azure with the AZURE_CREDENTIALS secret
+    - name: Login via Az module
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+        enable-AzPSSession: true 
+    
+    # Azure PowerShell: Run inline script
+    #                   source: https://github.com/marketplace/actions/azure-powershell-action   
+    - name: Run Azure PowerShell script (inline)
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          ## Update the Az Module to 5.6.0+ (does not work with GitHub Actions as it is not installed using Install-Module)
+          #Update-Module -Name Az -RequiredVersion 5.6.0 -Force #-ErrorAction SilentlyContinue
+
+          # Read the GitHub Actions variables
+          [string]$githubWorkspace = "${{GITHUB.WORKSPACE}}"
+
+          # Read the environment variables in PowerShell
+          [string]$location = [System.Environment]::GetEnvironmentVariable('LOCATION')
+          [string]$bicepFile = [System.Environment]::GetEnvironmentVariable('BICEP_FILE')
+          [string]$resourcegroupName = [System.Environment]::GetEnvironmentVariable('RESOURCE_GROUP_NAME')
+          
+          Write-Output ("* BICEP FILE: " + $($bicepFile))
+          Write-Output ("* RESOURCE GROUP NAME: " + $($resourcegroupName))
+          Write-Output ("* GITHUB_WORKSPACE: " + $($githubWorkspace))
+
+          $namePostFix = $resourcegroupName.Replace("rg-","")
+
+          ## Create a Template Parameter Object (hashtable)
+          $objTemplateParameter = @{
+            "location" = "$($location)";
+            "workSpaceName" = "ws-wvd-$($namePostFix)";
+            "hostpoolName" = "hp-wvd-$($namePostFix)";
+            "appgroupName" = "ag-wvd-$($namePostFix)";
+            "preferredAppGroupType" = "Desktop";
+            "hostPoolType" = "pooled";
+            "loadbalancertype" = "DepthFirst";
+            "appgroupType" = "Desktop";
+          }
+            
+          # Show objTemplateParameter
+          $objTemplateParameter
+          
+          # Location of the bicep file in the local checked-out repo
+          $biceptemplateFile = [string]("$($githubWorkspace)" + "\bicep\" + "$($bicepFile)")
+          Write-Output ("* BICEP TEMPLATE FILE: " + $($biceptemplateFile))
+
+          # Create the resourceGroup
+          New-AzResourceGroup -Name $resourcegroupName -Location $location
+
+          # ARM Template file
+          ## Deploy resources based on bicep file for ARM Template
+          New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupName -TemplateFile $($biceptemplateFile) -TemplateParameterObject $objTemplateParameter -Verbose
+        azPSVersion: 'latest'
