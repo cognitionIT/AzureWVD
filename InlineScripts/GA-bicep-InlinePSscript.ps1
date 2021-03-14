@@ -1,21 +1,23 @@
-﻿          ## Update the Az Module to 5.6.0+ (does not work with GitHub Actions as it is not installed using Install-Module)
+﻿          ## Update the Az Module to 5.6.0+ (does not work with GitHub Actions runner as it is not installed using Install-Module)
           #Update-Module -Name Az -RequiredVersion 5.6.0 -Force #-ErrorAction SilentlyContinue
 
           # Read the GitHub Actions variables
           [string]$githubWorkspace = "${{GITHUB.WORKSPACE}}"
 
-          # Read the environment variables in PowerShell
+          # Read the environment variables
           [string]$location = [System.Environment]::GetEnvironmentVariable('LOCATION')
-          [string]$bicepFilePath = [System.Environment]::GetEnvironmentVariable('BICEP_FILE_PATH')
+          [string]$bicepFile = [System.Environment]::GetEnvironmentVariable('BICEP_FILE')
           [string]$resourcegroupName = [System.Environment]::GetEnvironmentVariable('RESOURCE_GROUP_NAME')
           
-          Write-Output ("* BICEP FILE PATH: " + $($bicepFilePath))
+          # Debug info:
+          Write-Output ("* BICEP FILE: " + $($bicepFile))
           Write-Output ("* RESOURCE GROUP NAME: " + $($resourcegroupName))
           Write-Output ("* GITHUB_WORKSPACE: " + $($githubWorkspace))
 
+          # Use the resource group name as a postfix for the wvd components
           $namePostFix = $resourcegroupName.Replace("rg-","")
 
-          ## Create a Template Parameter Object (hashtable)
+          # Create a Template Parameter Object (hashtable)
           $objTemplateParameter = @{
             "location" = "$($location)";
             "workSpaceName" = "ws-wvd-$($namePostFix)";
@@ -26,17 +28,25 @@
             "loadbalancertype" = "DepthFirst";
             "appgroupType" = "Desktop";
           }
-            
-          # Show objTemplateParameter
-          $objTemplateParameter
+          ## Show objTemplateParameter (debug info)
+          #$objTemplateParameter
           
           # Location of the bicep file in the local checked-out repo
-          $biceptemplateFile = [string]("$($githubWorkspace)" + "\" + "$($bicepFilePath)")
+          $biceptemplateFile = [string]("$($githubWorkspace)" + "\bicep\" + "$($bicepFile)")
+          # Debug info: 
           Write-Output ("* BICEP TEMPLATE FILE: " + $($biceptemplateFile))
 
-          # Create the resourceGroup
-          New-AzResourceGroup -Name $resourcegroupName -Location $location
+          # Create the resourcegroup
+          $newResourceGroupParams = @{
+            Name     = $resourcegroupName
+            Location = $location
+          }
+          New-AzResourceGroup @newResourceGroupParams
 
-          # ARM Template file
-          ## Deploy resources based on bicep file for ARM Template
-          New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupName -TemplateFile $($biceptemplateFile) -TemplateParameterObject $objTemplateParameter -Verbose
+          # Deploy Azure resources based on bicep file as ARM Template file
+          $newResourceGroupDeploymentParams = @{
+            ResourceGroupName = $resourcegroupName
+            TemplateFile      = $($biceptemplateFile)
+            TemplateParameterObject = $objTemplateParameter
+          }
+          New-AzResourceGroupDeployment @newResourceGroupDeploymentParams -Verbose

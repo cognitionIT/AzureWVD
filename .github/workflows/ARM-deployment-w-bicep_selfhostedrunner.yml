@@ -2,30 +2,31 @@ name: ARM deployment with bicep (self-hosted runner)
 on: workflow_dispatch
 
 env:
-  LOCATION: "westeurope"                                                  # location for ARM deployment
-  BICEP_FILE: "demo.bicep"                                                # bicep filename to deploy
-  RESOURCE_GROUP_NAME: "rg-bicepdemo"                                     # resource group name for deployment
+  LOCATION: "westeurope"               # location for ARM deployment
+  BICEP_FILE: "demo.bicep"             # bicep filename to deploy
+  RESOURCE_GROUP_NAME: "rg-bicepdemo"  # resource group name for deployment
 
 jobs:
   build:
-    name: ARM Deployment with bicep file
+    name: ARM Deployment with bicep (self-hosted runner)
     #runs-on: windows-latest
     runs-on: self-hosted
     steps:
-    # Checkout: checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it. 
-    #           source: https://github.com/actions/checkout & https://github.com/marketplace/actions/checkout
+    # Action = Checkout: checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it. 
+    # source: https://github.com/marketplace/actions/checkout
     - name: Checkout
       uses: actions/checkout@v2
     
-    # Authentication: log on to Azure with the AZURE_CREDENTIALS secret
+    # Action = Azure Login: Log on to Azure and authenticate with the AZURE_CREDENTIALS secret
+    # source: https://github.com/marketplace/actions/azure-login
     - name: Login via Az module
       uses: azure/login@v1
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
         enable-AzPSSession: true 
-    # Azure PowerShell: Run inline script
-    #                   source: https://github.com/marketplace/actions/azure-powershell-action   
-    - name: Install Bicep with Azure PowerShell script (inline)
+    # Action = Azure PowerShell: Run inline script
+    # source: https://github.com/marketplace/actions/azure-powershell-action   
+    - name: Install Bicep with Azure PowerShell
       uses: azure/powershell@v1
       with:
         inlineScript: |
@@ -39,36 +40,41 @@ jobs:
           $currentPath = (Get-Item -path "HKCU:\Environment" ).GetValue('Path', '', 'DoNotExpandEnvironmentNames')
           if (-not $currentPath.Contains("%USERPROFILE%\.bicep")) { setx PATH ($currentPath + ";%USERPROFILE%\.bicep") }
           if (-not $env:path.Contains($installPath)) { $env:path += ";$installPath" }
-          # Copy the bicep file to system32
-          Copy-Item "$installPath\bicep.exe" -Destination "C:\Windows\System32"
+          # Copy the bicep file to %systemroot%\system32 if it is not already there
+          if (-not(Test-Path "$($env:SystemRoot)\System32\bicep.exe"))
+          {
+            Copy-Item "$installPath\bicep.exe" -Destination "$($env:SystemRoot)\System32" -Force
+          }
           # Verify you can now access the 'bicep' command.
           bicep --help
           # Done!
         azPSVersion: 'latest'
     # Azure PowerShell: Run inline script
     #                   source: https://github.com/marketplace/actions/azure-powershell-action   
-    - name: Deploy Bicep resources with Azure PowerShell script (inline)
+    - name: Deploy ARM Resources with Bicep & Azure PowerShell
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          ## Update the Az Module to 5.6.0+ (does not work with GitHub Actions as it is not installed using Install-Module)
+          ## Update the Az Module to 5.6.0+ (does not work with GitHub Actions runner as it is not installed using Install-Module)
           #Update-Module -Name Az -RequiredVersion 5.6.0 -Force #-ErrorAction SilentlyContinue
 
           # Read the GitHub Actions variables
           [string]$githubWorkspace = "${{GITHUB.WORKSPACE}}"
 
-          # Read the environment variables in PowerShell
+          # Read the environment variables
           [string]$location = [System.Environment]::GetEnvironmentVariable('LOCATION')
           [string]$bicepFile = [System.Environment]::GetEnvironmentVariable('BICEP_FILE')
           [string]$resourcegroupName = [System.Environment]::GetEnvironmentVariable('RESOURCE_GROUP_NAME')
           
+          # Debug info:
           Write-Output ("* BICEP FILE: " + $($bicepFile))
           Write-Output ("* RESOURCE GROUP NAME: " + $($resourcegroupName))
           Write-Output ("* GITHUB_WORKSPACE: " + $($githubWorkspace))
 
+          # Use the resource group name as a postfix for the wvd components
           $namePostFix = $resourcegroupName.Replace("rg-","")
 
-          ## Create a Template Parameter Object (hashtable)
+          # Create a Template Parameter Object (hashtable)
           $objTemplateParameter = @{
             "location" = "$($location)";
             "workSpaceName" = "ws-wvd-$($namePostFix)";
@@ -79,18 +85,26 @@ jobs:
             "loadbalancertype" = "DepthFirst";
             "appgroupType" = "Desktop";
           }
-            
-          # Show objTemplateParameter
-          $objTemplateParameter
+          ## Show objTemplateParameter (debug info)
+          #$objTemplateParameter
           
           # Location of the bicep file in the local checked-out repo
           $biceptemplateFile = [string]("$($githubWorkspace)" + "\bicep\" + "$($bicepFile)")
+          # Debug info: 
           Write-Output ("* BICEP TEMPLATE FILE: " + $($biceptemplateFile))
 
-          # Create the resourceGroup
-          New-AzResourceGroup -Name $resourcegroupName -Location $location
+          # Create the resourcegroup
+          $newResourceGroupParams = @{
+            Name     = $resourcegroupName
+            Location = $location
+          }
+          New-AzResourceGroup @newResourceGroupParams
 
-          # ARM Template file
-          ## Deploy resources based on bicep file for ARM Template
-          New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupName -TemplateFile $($biceptemplateFile) -TemplateParameterObject $objTemplateParameter -Verbose
+          # Deploy Azure resources based on bicep file as ARM Template file
+          $newResourceGroupDeploymentParams = @{
+            ResourceGroupName = $resourcegroupName
+            TemplateFile      = $($biceptemplateFile)
+            TemplateParameterObject = $objTemplateParameter
+          }
+          New-AzResourceGroupDeployment @newResourceGroupDeploymentParams -Verbose
         azPSVersion: 'latest'
