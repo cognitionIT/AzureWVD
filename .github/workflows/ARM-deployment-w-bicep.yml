@@ -11,12 +11,13 @@ jobs:
     name: ARM Deployment with bicep file
     runs-on: windows-latest
     steps:
-    # Checkout: checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it. 
-    #           source: https://github.com/actions/checkout & https://github.com/marketplace/actions/checkout
+    # Action = Checkout: checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it. 
+    # source: https://github.com/marketplace/actions/checkout
     - name: Checkout
       uses: actions/checkout@v2
     
-    # Authentication: log on to Azure with the AZURE_CREDENTIALS secret
+    # Action = Azure Login: Log on to Azure and authenticate with the AZURE_CREDENTIALS secret
+    # source: https://github.com/marketplace/actions/azure-login
     - name: Login via Az module
       uses: azure/login@v1
       with:
