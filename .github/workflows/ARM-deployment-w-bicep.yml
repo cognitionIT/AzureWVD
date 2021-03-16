@@ -59,9 +59,9 @@ jobs:
           Get-InstalledModule -Name Az -AllVersions | sort Version -Descending
         azPSVersion: 'latest'
 
-    # Azure PowerShell: Run inline script
-    #                   source: https://github.com/marketplace/actions/azure-powershell-action   
-    - name: Run Azure PowerShell script (inline)
+    # Action = Azure PowerShell: Run inline script
+    # source: https://github.com/marketplace/actions/azure-powershell-action   
+    - name: Deploy ARM Resources with Bicep & Azure PowerShell
       uses: azure/powershell@v1
       with:
         inlineScript: |
@@ -98,7 +98,7 @@ jobs:
           Write-Output ("* BICEP TEMPLATE FILE: " + $($biceptemplateFile))
 
           # Create the resourceGroup (if it does not yet exist)
-          if (!(Get-AzResourceGroup -Name $resourcegroupName)) {
+          if (!(Get-AzResourceGroup -Name $resourcegroupName -ErrorAction SilentlyContinue)) {
             New-AzResourceGroup -Name $resourcegroupName -Location $location
           }
 

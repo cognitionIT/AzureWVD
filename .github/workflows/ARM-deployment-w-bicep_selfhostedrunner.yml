@@ -49,8 +49,8 @@ jobs:
           bicep --help
           # Done!
         azPSVersion: 'latest'
-    # Azure PowerShell: Run inline script
-    #                   source: https://github.com/marketplace/actions/azure-powershell-action   
+    # Action = Azure PowerShell: Run inline script
+    # source: https://github.com/marketplace/actions/azure-powershell-action   
     - name: Deploy ARM Resources with Bicep & Azure PowerShell
       uses: azure/powershell@v1
       with:

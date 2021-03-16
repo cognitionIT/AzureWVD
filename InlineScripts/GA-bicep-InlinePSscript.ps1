@@ -31,7 +31,7 @@
           Write-Output ("* BICEP TEMPLATE FILE: " + $($biceptemplateFile))
 
           # Create the resourceGroup (if it does not yet exist)
-          if (!(Get-AzResourceGroup -Name $resourcegroupName)) {
+          if (!(Get-AzResourceGroup -Name $resourcegroupName -ErrorAction SilentlyContinue)) {
             New-AzResourceGroup -Name $resourcegroupName -Location $location
           }
 
