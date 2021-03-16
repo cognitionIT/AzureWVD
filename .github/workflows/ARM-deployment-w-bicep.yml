@@ -4,7 +4,7 @@ on: workflow_dispatch
 env:
   LOCATION: "westeurope"                                                  # location for ARM deployment
   BICEP_FILE: "demo.bicep"                                                # bicep filename to deploy
-  RESOURCE_GROUP_NAME: "rg-bicepdemo2"                                    # resource group name for deployment
+  RESOURCE_GROUP_NAME: "rg-bicepdemo"                                    # resource group name for deployment
 
 jobs:
   build:
@@ -23,15 +23,48 @@ jobs:
         creds: ${{secrets.AZURE_CREDENTIALS}}
         enable-AzPSSession: true 
     
+    # Action = Azure PowerShell: Run inline script
+    # source: https://github.com/marketplace/actions/azure-powershell-action   
+    - name: Prep runner with Bicep prereqs using Azure PowerShell
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          # Create the Bicep install folder
+          $installPath = "$env:USERPROFILE\.bicep"
+          $installDir = New-Item -ItemType Directory -Path $installPath -Force
+          $installDir.Attributes += 'Hidden'
+          # Fetch the latest Bicep CLI binary
+          (New-Object Net.WebClient).DownloadFile("https://github.com/Azure/bicep/releases/latest/download/bicep-win-x64.exe", "$installPath\bicep.exe")
+          # Add bicep to your PATH
+          $currentPath = (Get-Item -path "HKCU:\Environment" ).GetValue('Path', '', 'DoNotExpandEnvironmentNames')
+          if (-not $currentPath.Contains("%USERPROFILE%\.bicep")) { setx PATH ($currentPath + ";%USERPROFILE%\.bicep") }
+          if (-not $env:path.Contains($installPath)) { $env:path += ";$installPath" }
+          # Copy the bicep file to %systemroot%\system32 if it is not already there
+          if (-not(Test-Path "$($env:SystemRoot)\System32\bicep.exe"))
+          {
+            Copy-Item "$installPath\bicep.exe" -Destination "$($env:SystemRoot)\System32" -Force
+          }
+          # Verify you can now access the 'bicep' command.
+          bicep --help
+          # Done!
+          
+          ## Add Az PowerShell Module version 5.6.0 to the runner (if not already on the runner)
+          $minAzModuleVersion = '5.6.0'
+          if(!(Test-Path "C:\Modules\az_$minAzModuleVersion")) {
+            Install-Module -Name Az -AllowClobber -Scope CurrentUser -Force
+            Save-Module -Path "C:\Modules\az_$minAzModuleVersion" -Name Az -RequiredVersion $minAzModuleVersion -Force -ErrorAction Stop
+          }
+          $env:PSModulePath = "C:\Modules\az_$($minAzModuleVersion);$($env:PSModulePath)"
+          # Check installed versions of Az Module
+          Get-InstalledModule -Name Az -AllVersions | sort Version -Descending
+        azPSVersion: 'latest'
+
     # Azure PowerShell: Run inline script
     #                   source: https://github.com/marketplace/actions/azure-powershell-action   
     - name: Run Azure PowerShell script (inline)
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          ## Update the Az Module to 5.6.0+ (does not work with GitHub Actions as it is not installed using Install-Module)
-          #Update-Module -Name Az -RequiredVersion 5.6.0 -Force #-ErrorAction SilentlyContinue
-
           # Read the GitHub Actions variables
           [string]$githubWorkspace = "${{GITHUB.WORKSPACE}}"
 
@@ -49,24 +82,25 @@ jobs:
           ## Create a Template Parameter Object (hashtable)
           $objTemplateParameter = @{
             "location" = "$($location)";
-            "workSpaceName" = "ws-wvd-$($namePostFix)";
-            "hostpoolName" = "hp-wvd-$($namePostFix)";
-            "appgroupName" = "ag-wvd-$($namePostFix)";
+            "workSpaceName" = "ws-$($namePostFix)";
+            "hostpoolName" = "hp-$($namePostFix)";
+            "appgroupName" = "ag-$($namePostFix)";
             "preferredAppGroupType" = "Desktop";
             "hostPoolType" = "pooled";
             "loadbalancertype" = "DepthFirst";
             "appgroupType" = "Desktop";
           }
-            
-          # Show objTemplateParameter
-          $objTemplateParameter
+          ## Show objTemplateParameter
+          #$objTemplateParameter
           
           # Location of the bicep file in the local checked-out repo
           $biceptemplateFile = [string]("$($githubWorkspace)" + "\bicep\" + "$($bicepFile)")
           Write-Output ("* BICEP TEMPLATE FILE: " + $($biceptemplateFile))
 
-          # Create the resourceGroup
-          New-AzResourceGroup -Name $resourcegroupName -Location $location
+          # Create the resourceGroup (if it does not yet exist)
+          if (!(Get-AzResourceGroup -Name $resourcegroupName)) {
+            New-AzResourceGroup -Name $resourcegroupName -Location $location
+          }
 
           # ARM Template file
           ## Deploy resources based on bicep file for ARM Template
