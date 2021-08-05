@@ -12,7 +12,7 @@ resource hp 'Microsoft.DesktopVirtualization/hostpools@2019-12-10-preview' = {
     name: hostpoolName
     location: location
     properties: {
-      friendlyName: 'My Bicep generated Host pool'
+      friendlyName: 'Bicep generated Host pool'
       hostPoolType : hostPoolType
       loadBalancerType : loadbalancertype
       preferredAppGroupType: preferredAppGroupType
@@ -23,7 +23,7 @@ resource ag 'Microsoft.DesktopVirtualization/applicationgroups@2019-12-10-previe
 name: appgroupName
 location: location
 properties: {
-    friendlyName: 'My Bicep generated application Group'
+    friendlyName: 'Bicep generated application Group'
     applicationGroupType: appgroupType
     hostPoolArmPath: hp.id
   }
@@ -33,7 +33,7 @@ resource ws 'Microsoft.DesktopVirtualization/workspaces@2019-12-10-preview' = {
     name: workspaceName
     location: location
     properties: {
-        friendlyName: 'My Bicep generated Workspace'
+        friendlyName: 'Bicep generated Workspace'
       applicationGroupReferences: [
         ag.id
       ]
