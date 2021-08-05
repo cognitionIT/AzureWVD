@@ -2,9 +2,9 @@ name: ARM deployment with bicep
 on: workflow_dispatch
 
 env:
-  LOCATION: "westeurope"                                                  # location for ARM deployment
-  BICEP_FILE: "demo.bicep"                                                # bicep filename to deploy
-  RESOURCE_GROUP_NAME: "rg-bicepdemo"                                    # resource group name for deployment
+  LOCATION: "westeurope"                   # location for ARM deployment
+  BICEP_FILE: "demo.bicep"                 # bicep filename to deploy
+  RESOURCE_GROUP_NAME: "rg-bicepdemo"      # resource group name for deployment
 
 jobs:
   build:

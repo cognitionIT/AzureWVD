@@ -1,0 +1,88 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "eastus"
+    },
+    "workspaceName": {
+      "type": "string",
+      "defaultValue": "ws-wvd-bicep"
+    },
+    "hostpoolName": {
+      "type": "string",
+      "defaultValue": "hp-wvd-bicep"
+    },
+    "appgroupName": {
+      "type": "string",
+      "defaultValue": "ag-wvd-bicep"
+    },
+    "preferredAppGroupType": {
+      "type": "string",
+      "defaultValue": "Desktop"
+    },
+    "hostPoolType": {
+      "type": "string",
+      "defaultValue": "pooled"
+    },
+    "loadbalancertype": {
+      "type": "string",
+      "defaultValue": "BreadthFirst"
+    },
+    "appgroupType": {
+      "type": "string",
+      "defaultValue": "Desktop"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.DesktopVirtualization/hostPools",
+      "apiVersion": "2019-12-10-preview",
+      "name": "[parameters('hostpoolName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "friendlyName": "My Bicep generated Host pool",
+        "hostPoolType": "[parameters('hostPoolType')]",
+        "loadBalancerType": "[parameters('loadbalancertype')]",
+        "preferredAppGroupType": "[parameters('preferredAppGroupType')]"
+      }
+    },
+    {
+      "type": "Microsoft.DesktopVirtualization/applicationGroups",
+      "apiVersion": "2019-12-10-preview",
+      "name": "[parameters('appgroupName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "friendlyName": "My Bicep generated application Group",
+        "applicationGroupType": "[parameters('appgroupType')]",
+        "hostPoolArmPath": "[resourceId('Microsoft.DesktopVirtualization/hostPools', parameters('hostpoolName'))]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DesktopVirtualization/hostPools', parameters('hostpoolName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.DesktopVirtualization/workspaces",
+      "apiVersion": "2019-12-10-preview",
+      "name": "[parameters('workspaceName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "friendlyName": "My Bicep generated Workspace",
+        "applicationGroupReferences": [
+          "[resourceId('Microsoft.DesktopVirtualization/applicationGroups', parameters('appgroupName'))]"
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DesktopVirtualization/applicationGroups', parameters('appgroupName'))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "workspaceid": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('workspaceName'))]"
+    }
+  }
+}

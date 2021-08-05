@@ -1,3 +1,4 @@
+
 param location string = 'eastus'
 param workspaceName string = 'ws-wvd-bicep'
 param hostpoolName string = 'hp-wvd-bicep'
