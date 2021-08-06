@@ -4,7 +4,7 @@ on: workflow_dispatch
 env:
   LOCATION: "westeurope"                   # location for ARM deployment
   BICEP_FILE: "hellohostpool.bicep"        # bicep filename to deploy
-  RESOURCE_GROUP_NAME: "rg-bicepdemo"      # resource group name for deployment
+  RESOURCE_GROUP_NAME: "bicepdemo-rg"      # resource group name for deployment
 
 jobs:
   build:

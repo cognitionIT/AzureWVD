@@ -1,5 +1,6 @@
 param prefix string = 'bicepdemo'
 
+@secure()
 param password string = 'supersecret'
 
 @allowed([
@@ -49,6 +50,6 @@ resource ws 'Microsoft.DesktopVirtualization/workspaces@2019-12-10-preview' = {
   }
 }
 
-output hp string = hp.id
+output hp string = hp.name
 
 
