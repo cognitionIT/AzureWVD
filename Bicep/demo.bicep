@@ -33,7 +33,7 @@ resource ws 'Microsoft.DesktopVirtualization/workspaces@2019-12-10-preview' = {
     name: workspaceName
     location: location
     properties: {
-        friendlyName: 'Bicep generated Workspace'
+      friendlyName: 'Bicep generated Workspace'
       applicationGroupReferences: [
         ag.id
       ]

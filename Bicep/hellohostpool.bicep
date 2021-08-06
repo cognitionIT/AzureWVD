@@ -34,7 +34,7 @@ resource  ag 'Microsoft.DesktopVirtualization/applicationgroups@2019-12-10-previ
   properties: {
     friendlyName: 'appgroup for bicep demo'
     applicationGroupType: appGroupType
-    hostPoolArmPath: resourceId('Microsoft.DesktopVirtualization/hostpools', 'REQUIRED')
+    hostPoolArmPath: hp.id
   }
 }
 
@@ -43,6 +43,9 @@ resource ws 'Microsoft.DesktopVirtualization/workspaces@2019-12-10-preview' = {
   location: resourceGroup().location
   properties: {
     friendlyName: 'workspace for bicep demo'
+    applicationGroupReferences: [
+      ag.id
+    ]
   }
 }
 
