@@ -12,8 +12,8 @@ Write-Output ("* GITHUB_WORKSPACE: " + $($githubWorkspace))
 
 ## Create a Template Parameter Object (hashtable)
 $objTemplateParameter = @{
-  "prefix" = "bicepdemo";
-  "hostPoolType" = "Pooled";
+  "prefix"           = "bicepdemo";
+  "hostPoolType"     = "Pooled";
   "loadbalancerType" = "DepthFirst";
 }
 
@@ -28,6 +28,6 @@ if (!(Get-AzResourceGroup -Name $resourcegroupName -ErrorAction SilentlyContinue
 
 ## Deploy resources based on bicep file for ARM Template
 New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupName `
-                              -TemplateFile $($biceptemplateFile) `
-                              -TemplateParameterObject $objTemplateParameter `
-                              -Verbose
+  -TemplateFile $($biceptemplateFile) `
+  -TemplateParameterObject $objTemplateParameter `
+  -Verbose
