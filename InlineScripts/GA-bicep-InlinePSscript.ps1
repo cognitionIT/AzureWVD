@@ -1,7 +1,7 @@
-﻿# Read the GitHub Actions variables
+﻿# Read the GitHub Actions built-in ariables
 [string]$githubWorkspace = "${{GITHUB.WORKSPACE}}"
 
-# Read the environment variables in PowerShell
+# Read the environment variables in PowerShell (GitHub Action inputs)
 [string]$location = [System.Environment]::GetEnvironmentVariable('LOCATION')
 [string]$bicepFile = [System.Environment]::GetEnvironmentVariable('BICEP_FILE')
 [string]$resourcegroupName = [System.Environment]::GetEnvironmentVariable('RESOURCE_GROUP_NAME')
@@ -10,23 +10,14 @@ Write-Output ("* BICEP FILE: " + $($bicepFile))
 Write-Output ("* RESOURCE GROUP NAME: " + $($resourcegroupName))
 Write-Output ("* GITHUB_WORKSPACE: " + $($githubWorkspace))
 
-$namePostFix = $resourcegroupName.Replace("rg-","")
-
 ## Create a Template Parameter Object (hashtable)
 $objTemplateParameter = @{
-  "location" = "$($location)";
-  "workSpaceName" = "ws-$($namePostFix)";
-  "hostpoolName" = "hp-$($namePostFix)";
-  "appgroupName" = "ag-$($namePostFix)";
-  "preferredAppGroupType" = "Desktop";
-  "hostPoolType" = "pooled";
-  "loadbalancertype" = "DepthFirst";
-  "appgroupType" = "Desktop";
+  "prefix" = "bicepdemo";
+  "hostPoolType" = "Pooled";
+  "loadbalancerType" = "DepthFirst";
 }
-## Show objTemplateParameter
-#$objTemplateParameter
 
-# Location of the bicep file in the local checked-out repo
+# Location of the bicep file in the local copy of the repo
 $biceptemplateFile = [string]("$($githubWorkspace)" + "\bicep\" + "$($bicepFile)")
 Write-Output ("* BICEP TEMPLATE FILE: " + $($biceptemplateFile))
 
@@ -35,6 +26,8 @@ if (!(Get-AzResourceGroup -Name $resourcegroupName -ErrorAction SilentlyContinue
   New-AzResourceGroup -Name $resourcegroupName -Location $location
 }
 
-# ARM Template file
 ## Deploy resources based on bicep file for ARM Template
-New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupName -TemplateFile $($biceptemplateFile) -TemplateParameterObject $objTemplateParameter -Verbose
+New-AzResourceGroupDeployment -ResourceGroupName $resourcegroupName `
+                              -TemplateFile $($biceptemplateFile) `
+                              -TemplateParameterObject $objTemplateParameter `
+                              -Verbose
