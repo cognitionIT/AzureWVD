@@ -46,14 +46,9 @@ jobs:
 
           ## Create a Template Parameter Object (hashtable)
           $objTemplateParameter = @{
-            "location" = "$($location)";
-            "workSpaceName" = "ws-$($namePostFix)";
-            "hostpoolName" = "hp-$($namePostFix)";
-            "appgroupName" = "ag-$($namePostFix)";
-            "preferredAppGroupType" = "Desktop";
-            "hostPoolType" = "pooled";
-            "loadbalancertype" = "DepthFirst";
-            "appgroupType" = "Desktop";
+            "prefix" = "bicepdemo";
+            "hostPoolType" = "Pooled";
+            "loadbalancerType" = "DepthFirst";
           }
           ## Show objTemplateParameter
           #$objTemplateParameter
