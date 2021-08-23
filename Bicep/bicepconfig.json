@@ -3,7 +3,7 @@
         "core": {
             "enabled": true,
             "rules": {
-                "no-hardcoded-env-urls": {
+                "secure-parameter-default": {
                     "level": "warning"
                 },
                 "no-unused-params": {
@@ -12,10 +12,10 @@
                 "no-unused-vars": {
                     "level": "warning"
                 },
-                "prefer-interpolation": {
+                "no-hardcoded-env-urls": {
                     "level": "warning"
                 },
-                "secure-parameter-default": {
+                "prefer-interpolation": {
                     "level": "warning"
                 },
                 "simplify-interpolation": {

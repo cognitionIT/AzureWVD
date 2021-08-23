@@ -1,8 +1,5 @@
 param prefix string = 'bicepdemo'
 
-@secure()
-param password string = 'supersecret'
-
 @allowed([
   'Pooled'
   'Personal'
@@ -18,7 +15,7 @@ param loadbalancerType string = 'BreadthFirst'
 
 var appGroupType = 'Desktop'
 
-resource hp 'Microsoft.DesktopVirtualization/hostpools@2019-12-10-preview' = {
+resource hp 'Microsoft.DesktopVirtualization/hostPools@2021-05-13-preview' = {
   name: '${prefix}-hp'
   location: resourceGroup().location
   properties: {
@@ -29,7 +26,7 @@ resource hp 'Microsoft.DesktopVirtualization/hostpools@2019-12-10-preview' = {
   }
 }
 
-resource  ag 'Microsoft.DesktopVirtualization/applicationgroups@2019-12-10-preview' = {
+resource  ag 'Microsoft.DesktopVirtualization/applicationGroups@2021-05-13-preview' = {
   name: '${prefix}-ag'
   location: resourceGroup().location
   properties: {
@@ -39,7 +36,7 @@ resource  ag 'Microsoft.DesktopVirtualization/applicationgroups@2019-12-10-previ
   }
 }
 
-resource ws 'Microsoft.DesktopVirtualization/workspaces@2019-12-10-preview' = {
+resource ws 'Microsoft.DesktopVirtualization/workspaces@2021-05-13-preview' = {
   name: '${prefix}-ws'
   location: resourceGroup().location
   properties: {
