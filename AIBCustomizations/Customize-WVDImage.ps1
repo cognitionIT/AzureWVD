@@ -34,8 +34,8 @@ Start-Sleep -Seconds 180
 #endregion
 
 #region Install Visual Studio Code
-Invoke-WebRequest -Uri 'https://go.microsoft.com/fwlink/?LinkID=623230' -OutFile 'c:\Install\vscode-install.exe'
-Invoke-Expression -Command "C:\Install\vscode-install.exe /silent /mergetasks='!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath'"
+Invoke-WebRequest -Uri 'https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user' -OutFile 'c:\Install\vscode-install.exe'
+Invoke-Expression -Command 'C:\Install\vscode-install.exe /verysilent /suppressmsgboxes /mergetasks=!runcode'
 
 # Wait for Visual Studio Code installer to finish
 Start-Sleep -Seconds 180
