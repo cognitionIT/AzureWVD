@@ -34,8 +34,8 @@ jobs:
         managed-identity: ${{secrets.AZURE_AIB_IDENTITY}}
         source-os-type: 'windows'
         source-image-type: 'platformImage'
-        #source-image: 'MicrosoftWindowsDesktop:office-365:20h2-evd-o365pp:latest'
-        source-image: 'MicrosoftWindowsDesktop:windows-10:win10-21h2-avd:latest'
+        source-image: 'MicrosoftWindowsDesktop:office-365:20h2-evd-o365pp:latest'
+        #source-image: 'MicrosoftWindowsDesktop:windows-10:win10-21h2-avd:latest'
         customizer-source: '${{GITHUB.WORKSPACE}}\AIBCustomizations'
         customizer-script: |
           & 'C:\AIBCustomizations\Customize-WVDImage.ps1'
