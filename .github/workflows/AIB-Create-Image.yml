@@ -36,9 +36,9 @@ jobs:
         source-image-type: 'platformImage'
         source-image: 'MicrosoftWindowsDesktop:office-365:20h2-evd-o365pp:latest'
         #source-image: 'MicrosoftWindowsDesktop:windows-10:win10-21h2-avd:latest'
-        #customizer-source: '${{GITHUB.WORKSPACE}}\AIBCustomizations'
-        #customizer-script: |
-        #  & 'C:\AIBCustomizations\Customize-WVDImage.ps1'
+        customizer-source: '${{GITHUB.WORKSPACE}}\AIBCustomizations'
+        customizer-script: |
+          & 'C:\AIBCustomizations\Customize-WVDImage.ps1'
         dist-type: 'SharedImageGallery'
         dist-resource-id: '/subscriptions/${{secrets.AZURE_SUBSCRIPTIONID}}/resourceGroups/rg-wvd-images/providers/Microsoft.Compute/galleries/sigWVDImages/images/${{env.SIG_IMAGE_DEF_NAME}}/versions/${{env.AIB_IMAGE_VERSION}}'
         dist-location: 'westeurope'

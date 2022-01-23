@@ -43,14 +43,43 @@ Start-Sleep -Seconds 180
 
 #region Install Bicep vscode extension
 # Install the .NET Install Tool for Extension Authors dependecy for Bicep extension
-Invoke-Expression -Command 'code --install-extension ms-dotnettools.vscode-dotnet-runtime --force'
+Invoke-Expression -Command 'code --install-extension ms-dotnettools.vscode-dotnet-runtime --force' -ErrorAction SilentlyContinue
 Start-Sleep -Seconds 180
 # Install the Bicep extension
-Invoke-Expression -Command 'code --install-extension ms-azuretools.vscode-bicep --force'
+Invoke-Expression -Command 'code --install-extension ms-azuretools.vscode-bicep --force' -ErrorAction SilentlyContinue
 Start-Sleep -Seconds 180
 #endregion
 
 #region Install PowerShell Az module
-Install-Module -Name Az -Force -Scope AllUsers
+Install-PackageProvider -Name NuGet -Force
+Install-Module -Name Az -Force -Scope AllUsers -Confirm:$false
+Get-InstalledModule -Name Az
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope LocalMachine -Force
+#endregion
+
+#region install Bicep
+# Create the Bicep install folder
+$installPath = "C:\Tools\.bicep"
+$installDir = New-Item -ItemType Directory -Path $installPath -Force
+$installDir.Attributes += 'Hidden'
+
+# Fetch the latest Bicep CLI binary
+(New-Object Net.WebClient).DownloadFile("https://github.com/Azure/bicep/releases/latest/download/bicep-win-x64.exe", "$installPath\bicep.exe")
+
+# Add bicep to your PATH
+$currentPath = (Get-Item -path "HKCU:\Environment" ).GetValue('Path', '', 'DoNotExpandEnvironmentNames')
+if (-not $currentPath.Contains("$($installPath)")) { setx PATH ($currentPath + ";$($installPath)") }
+if (-not $env:path.Contains($installPath)) { $env:path += ";$installPath" }
+
+# Copy the bicep file to %systemroot%\system32 if it is not already there
+if (-not(Test-Path "$($env:SystemRoot)\System32\bicep.exe"))
+{
+    Copy-Item "$installPath\bicep.exe" -Destination "$($env:SystemRoot)\System32" -Force
+}
+
+# Verify you can now access the 'bicep' command.
+#bicep --help
+bicep --version
+# Done!
 #endregion
 
