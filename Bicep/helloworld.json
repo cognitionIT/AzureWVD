@@ -5,9 +5,72 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "11855874804898679700"
+      "templateHash": "8012760901275947490"
+    }
+  },
+  "parameters": {
+    "prefix": {
+      "type": "string",
+      "defaultValue": "bicepdemo"
+    },
+    "password": {
+      "type": "secureString",
+      "defaultValue": "supersecret"
+    },
+    "hostpoolType": {
+      "type": "string",
+      "defaultValue": "Pooled",
+      "allowedValues": [
+        "Pooled",
+        "Personal"
+      ]
+    },
+    "loadbalancerType": {
+      "type": "string",
+      "defaultValue": "BreadthFirst",
+      "allowedValues": [
+        "BreadthFirst",
+        "DepthFirst",
+        "Persistent"
+      ]
     }
   },
   "functions": [],
-  "resources": []
+  "variables": {
+    "appGroupType": "Desktop"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.DesktopVirtualization/hostPools",
+      "apiVersion": "2021-05-13-preview",
+      "name": "[format('{0}-hp', parameters('prefix'))]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "friendlyName": "hostpool for the bicep demo",
+        "hostPoolType": "[parameters('hostpoolType')]",
+        "loadBalancerType": "[parameters('loadbalancerType')]",
+        "preferredAppGroupType": "[variables('appGroupType')]"
+      }
+    },
+    {
+      "type": "Microsoft.DesktopVirtualization/applicationGroups",
+      "apiVersion": "2019-12-10-preview",
+      "name": "name",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "friendlyName": "friendlyName",
+        "applicationGroupType": "Desktop",
+        "hostPoolArmPath": "[resourceId('Microsoft.DesktopVirtualization/hostPools', format('{0}-hp', parameters('prefix')))]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DesktopVirtualization/hostPools', format('{0}-hp', parameters('prefix')))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "hp": {
+      "type": "string",
+      "value": "[format('{0}-hp', parameters('prefix'))]"
+    }
+  }
 }

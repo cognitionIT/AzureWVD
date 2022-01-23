@@ -4,10 +4,10 @@
             "enabled": true,
             "rules": {
                 "secure-parameter-default": {
-                    "level": "warning"
+                    "level": "off"
                 },
                 "no-unused-params": {
-                    "level": "warning"
+                    "level": "off"
                 },
                 "no-unused-vars": {
                     "level": "warning"
